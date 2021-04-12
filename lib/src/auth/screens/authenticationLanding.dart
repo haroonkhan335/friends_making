@@ -20,13 +20,16 @@ class _AuthenticationLandingState extends State<AuthenticationLanding> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AuthController>(
-        builder: (_) => authController.user == null &&
-                authController.isAuthenticationCompleted == false
-            ? Scaffold(body: Center(child: CircularProgressIndicator()))
-            : authController.user == null &&
-                    authController.isAuthenticationCompleted
-                ? LoginScreen()
-                : HomeScreen());
+    return GetBuilder<AuthController>(builder: (_) {
+      print('USER === ${authController.user}');
+      print('AUTH COMPLETED === ${authController.isAuthenticationCompleted}');
+      return authController.user == null &&
+              authController.isAuthenticationCompleted == false
+          ? Scaffold(body: Center(child: CircularProgressIndicator()))
+          : authController.user == null &&
+                  authController.isAuthenticationCompleted
+              ? LoginScreen()
+              : HomeScreen();
+    });
   }
 }

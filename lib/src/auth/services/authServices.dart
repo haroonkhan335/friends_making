@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:friends_making/src/auth/models/userModel.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:get/get.dart';
 
 class AuthService {
   final _firebaseAuth = FirebaseAuth.instance;
@@ -47,8 +48,10 @@ class AuthService {
 
       // return UserModel.fromDocument(
       //     (await userReference(currentUser.uid).once()).value);
-    } catch (e) {}
-    return UserModel();
+    } catch (e) {
+      Get.snackbar('Error logging in', '$e');
+      return null;
+    }
   }
 
   Future<UserModel> logOut() async {

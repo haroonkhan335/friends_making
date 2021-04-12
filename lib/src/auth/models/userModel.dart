@@ -29,6 +29,8 @@ class UserModel {
         'uid': this.uid,
         'fullName': this.fullName,
         'image': this.image,
-        'email': this.email
+        'email': this.email,
+        'followers': this.followers,
+        'followings': this.followings,
       };
 }

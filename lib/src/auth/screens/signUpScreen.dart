@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -36,7 +37,10 @@ class SignUpScreen extends StatelessWidget {
                                   .pickImage(source: ImageSource.gallery);
 
                               if (pickedFile != null) {
-                                authController.setFile(File(pickedFile.path));
+                                log('Picked File path = ${pickedFile.path}');
+                                authController.pickedFile =
+                                    File(pickedFile.path);
+                                authController.update();
                               }
                             },
                             child: Container(
