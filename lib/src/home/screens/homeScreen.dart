@@ -35,11 +35,6 @@ class HomeScreen extends StatelessWidget {
                     return controller.homePages[index];
                   }),
             ),
-            FlatButton(
-                child: Text('GO to Route'),
-                onPressed: () {
-                  Get.toNamed(Pages.SIGN_UP);
-                }),
           ],
         ),
       ),

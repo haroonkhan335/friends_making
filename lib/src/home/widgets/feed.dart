@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:friends_making/src/home/controllers/feedController.dart';
+import 'package:friends_making/src/home/widgets/allPosts.dart';
 import 'package:get/get.dart';
 
 class Feed extends StatelessWidget {
@@ -34,6 +35,7 @@ class Feed extends StatelessWidget {
                   Text('Body'),
                   feedController.isEditing
                       ? TextFormField(
+                          maxLines: 5,
                           controller: feedController.bodyPostController,
                           decoration:
                               InputDecoration(border: OutlineInputBorder()),
@@ -52,52 +54,11 @@ class Feed extends StatelessWidget {
                               )
                             ],
                           ),
-                          child: Text(feedController.bodyPostController.text)),
+                          child: RichText(
+                              text: TextSpan(
+                                  text: '', children: feedController.body)),
+                        ),
                   SizedBox(height: 15),
-                  Text('Tags'),
-                  feedController.isEditing
-                      ? TextFormField(
-                          controller: feedController.postTagsController,
-                          decoration:
-                              InputDecoration(border: OutlineInputBorder()),
-                        )
-                      : Container(
-                          height: 40,
-                          width: width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                blurRadius: 5,
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            children: feedController.currentTags
-                                .map((tag) => Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 5.0),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 5, vertical: 3),
-                                        child: Text(tag),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black26,
-                                              blurRadius: 5,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ))
-                                .toList(),
-                          )),
                   feedController.isEditing
                       ? ElevatedButton(
                           onPressed: () {
@@ -116,7 +77,7 @@ class Feed extends StatelessWidget {
                             SizedBox(width: 25),
                             ElevatedButton(
                               onPressed: () {
-                                feedController.finishWritingPost();
+                                feedController.post();
                               },
                               child: Text('Post'),
                             )
@@ -126,6 +87,9 @@ class Feed extends StatelessWidget {
               ),
             ),
           ),
+          Expanded(
+            child: AllPosts(),
+          )
         ],
       ),
     ));

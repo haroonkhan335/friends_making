@@ -5,10 +5,12 @@ class UserModel {
   String email;
   List followers = [];
   List followings = [];
+  List posts = [];
 
   UserModel(
       {this.fullName,
       this.followers,
+      this.posts,
       this.followings,
       this.email,
       this.uid,
@@ -19,6 +21,7 @@ class UserModel {
       fullName: doc['fullName'],
       uid: doc['uid'],
       image: doc['image'],
+      posts: doc['posts'] ?? [],
       email: doc['email'],
       followers: doc['followers'] ?? [],
       followings: doc['followers'] ?? [],
@@ -32,5 +35,6 @@ class UserModel {
         'email': this.email,
         'followers': this.followers,
         'followings': this.followings,
+        'posts': this.posts,
       };
 }
