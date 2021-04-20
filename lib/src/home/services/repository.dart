@@ -26,15 +26,26 @@ class Repository {
   DatabaseReference postRef(String postId) =>
       dbReference.child('posts/' + postId);
 
-  Future<List<UserModel>> getAllUsers() async {
-    List<UserModel> usersFromDB = [];
-    final data = (await users.once()).value;
-    data.forEach((key, value) {
-      print("VALUE: $value");
-      usersFromDB.add(UserModel.fromDocument(value));
-    });
+  Future<List<UserModel>> getFollowers() async {
+    List<UserModel> followers = [];
 
-    return usersFromDB;
+    for (final userId in currUser.followers) {
+      final followerDoc = await users.child(userId).once();
+      followers.add(UserModel.fromDocument(followerDoc.value));
+    }
+
+    return followers;
+  }
+
+  Future<List<UserModel>> getFollowings() async {
+    List<UserModel> followings = [];
+
+    for (final userId in currUser.followings) {
+      final followerDoc = await users.child(userId).once();
+      followings.add(UserModel.fromDocument(followerDoc.value));
+    }
+
+    return followings;
   }
 
   Future<void> followUser(

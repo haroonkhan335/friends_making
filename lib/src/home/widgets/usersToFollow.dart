@@ -15,7 +15,7 @@ class _UsersToFollowState extends State<UsersToFollow> {
   @override
   void initState() {
     super.initState();
-    followController.getUsers();
+    followController.getFollowers();
   }
 
   @override
@@ -29,42 +29,99 @@ class _UsersToFollowState extends State<UsersToFollow> {
                     child: Text('Getting data ...'),
                   )
                 : Expanded(
-                    child: controller.usersToFollow.length == 0
-                        ? Center(child: Text('No Users'))
-                        : ListView.builder(
-                            itemCount: controller.usersToFollow.length,
-                            itemBuilder: (context, index) {
-                              final user = controller.usersToFollow[index];
-                              return ListTile(
-                                  leading: Container(
-                                    height: 50,
-                                    width: 50,
-                                    child: CachedNetworkImage(
-                                      imageUrl: user.image,
-                                      imageBuilder: (context, image) =>
-                                          Image(image: image),
+                    child: Column(
+                      children: [
+                        Container(
+                            height: 50,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      controller.selectedTab = TAB.Followers;
+                                      controller.update();
+                                      controller.getFollowers();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: controller.selectedTab ==
+                                                    TAB.Followers
+                                                ? Colors.blue
+                                                : Colors.white,
+                                            width: 2,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text('Followers'),
+                                      ),
                                     ),
                                   ),
-                                  title: Text(user.fullName),
-                                  subtitle: Text(user.email),
-                                  trailing: GetBuilder<AuthController>(
-                                    builder: (con) => FlatButton(
-                                      child: Text(
-                                          con.user.followings.contains(user.uid)
-                                              ? 'Following'
-                                              : 'Follow'),
-                                      onPressed:
-                                          con.user.followings.contains(user.uid)
-                                              ? null
-                                              : () {
-                                                  controller.followUser(
-                                                      followingUser: user,
-                                                      currentUser: con.user);
-                                                },
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      controller.selectedTab = TAB.Followings;
+                                      controller.update();
+                                      controller.getFollowings();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: controller.selectedTab ==
+                                                    TAB.Followings
+                                                ? Colors.blue
+                                                : Colors.white,
+                                            width: 2,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text('Followings'),
+                                      ),
                                     ),
-                                  ));
-                            },
-                          ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                        Expanded(
+                          child: controller.selectedTab == TAB.Followers &&
+                                  controller.followers.length == 0
+                              ? Center(child: Text('No Followers'))
+                              : controller.selectedTab == TAB.Followings &&
+                                      controller.followings.length == 0
+                                  ? Center(child: Text('No Followings'))
+                                  : ListView.builder(
+                                      itemCount: controller.selectedTab ==
+                                              TAB.Followers
+                                          ? controller.followers.length
+                                          : controller.followings.length,
+                                      itemBuilder: (context, index) {
+                                        final user = controller.selectedTab ==
+                                                TAB.Followers
+                                            ? controller.followers[index]
+                                            : controller.followings[index];
+                                        return ListTile(
+                                          leading: Container(
+                                            height: 50,
+                                            width: 50,
+                                            child: CachedNetworkImage(
+                                              imageUrl: user.image,
+                                              imageBuilder: (context, image) =>
+                                                  Image(image: image),
+                                            ),
+                                          ),
+                                          title: Text(user.fullName),
+                                          subtitle: Text(user.email),
+                                        );
+                                      },
+                                    ),
+                        ),
+                      ],
+                    ),
                   ),
           ),
         ],
