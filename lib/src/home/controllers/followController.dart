@@ -43,7 +43,7 @@ class FollowController extends GetxController {
       update();
 
       followings = await repo.getFollowings();
-      hasGottenFollowers = true;
+      hasGottenFollowings = true;
 
       isLoading = false;
       update();
