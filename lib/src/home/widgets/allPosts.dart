@@ -13,8 +13,8 @@ class AllPosts extends StatelessWidget {
   final postRef = FirebaseDatabase.instance.reference().child('posts');
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
+    return Flexible(
+      child: StreamBuilder(
           stream: postRef.orderByChild('postTime').onValue,
           builder: (context, snapshot) {
             if (snapshot.hasData) {

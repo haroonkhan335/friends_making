@@ -38,6 +38,10 @@ class BottomNavigation extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
+            label: 'Follow',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
             label: 'Profile',
           )
         ],

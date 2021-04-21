@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:friends_making/src/auth/controllers/authController.dart';
 import 'package:friends_making/src/auth/models/userModel.dart';
 import 'package:friends_making/src/home/services/repository.dart';
@@ -20,6 +23,10 @@ class FollowController extends GetxController {
 
   List<UserModel> followings = [];
 
+  List<UserModel> allUsers = [];
+
+  UserModel get currentUser => Get.find<AuthController>().user;
+
   void getFollowers() async {
     if (!hasGottenFollowers) {
       isLoading = true;
@@ -32,10 +39,6 @@ class FollowController extends GetxController {
       update();
     }
   }
-
-  // Haroon
-  //
-  // [h, ha, har, haro, haroo, haroon]
 
   void getFollowings() async {
     if (!hasGottenFollowings) {
@@ -53,8 +56,23 @@ class FollowController extends GetxController {
   void followUser({UserModel followingUser, UserModel currentUser}) async {
     await repo.followUser(
         followingUser: followingUser, currentUser: currentUser);
-    authController.user.followings.add(followingUser.uid);
+    final listOfFollwers = [
+      ...authController.user.followings,
+      followingUser.uid
+    ];
+    authController.user.followings = listOfFollwers;
+
+    log('FOLLOWERS === ${authController.user.followings.length}');
+    allUsers.removeWhere((user) => user.uid == followingUser.uid);
     authController.update();
+    update();
+  }
+
+  void getAllUser() async {
+    isLoading = true;
+    update();
+    allUsers = await repo.allUsers();
+    isLoading = false;
     update();
   }
 }

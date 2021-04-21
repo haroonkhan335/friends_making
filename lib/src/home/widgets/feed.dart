@@ -87,9 +87,7 @@ class Feed extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: AllPosts(),
-          )
+          AllPosts(),
         ],
       ),
     ));

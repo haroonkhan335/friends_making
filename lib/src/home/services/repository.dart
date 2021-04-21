@@ -87,4 +87,17 @@ class Repository {
       'comments': [...post.comments, comment.commentId],
     });
   }
+
+  Future<List<UserModel>> allUsers() async {
+    List<UserModel> allUsers = [];
+    final usersFromDB = await users.once();
+
+    usersFromDB.value.forEach((key, value) {
+      allUsers.add(UserModel.fromDocument(value));
+    });
+
+    allUsers.removeWhere((user) => currUser.followings.contains(user.uid));
+
+    return allUsers;
+  }
 }
