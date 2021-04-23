@@ -29,14 +29,18 @@ class AllPosts extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final post = posts[index];
                   return ListTile(
-                    leading: post.posterProfilePicture == null
-                        ? CircleAvatar(
-                            child: Icon(Icons.account_circle_outlined))
-                        : CachedNetworkImage(
-                            imageUrl: post.posterProfilePicture,
-                            imageBuilder: (_, image) =>
-                                CircleAvatar(backgroundImage: image),
-                          ),
+                    leading: Container(
+                      height: 60,
+                      width: 60,
+                      child: post.posterProfilePicture == null
+                          ? CircleAvatar(
+                              child: Icon(Icons.account_circle_outlined))
+                          : CachedNetworkImage(
+                              imageUrl: post.posterProfilePicture,
+                              imageBuilder: (_, image) =>
+                                  CircleAvatar(backgroundImage: image),
+                            ),
+                    ),
                     title: post.posterFullName == null
                         ? Text('Friend')
                         : Text(post.posterFullName),
