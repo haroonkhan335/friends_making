@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -60,6 +62,7 @@ class Repository {
   }
 
   Future<void> post({Post post}) async {
+    log('USER POSTS ============ ${Get.find<AuthController>().user.posts}');
     await allPostRef.child(post.postId).set(post.toJson());
     await userReference(currUser.uid).update({
       'posts': [...currUser.posts, post.postId],

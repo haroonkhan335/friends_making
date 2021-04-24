@@ -1,4 +1,5 @@
 const functions = require("firebase-functions");
+const admin = require("firebase-admin");
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -19,7 +20,7 @@ exports.helloWorldAnother = functions.https.onCall((request, response) => {
 });
 
 exports.test = functions.database.ref('/user/{userId}/followers/{followersId}')
-    .o((change, context) => {
+    .onUpdate(async (change, context) => {
         // Grab the current value of what was written to the Realtime Database.
         // const original = snapshot.val();
 
@@ -27,12 +28,17 @@ exports.test = functions.database.ref('/user/{userId}/followers/{followersId}')
         const userId = context.params.user;
         const followersId = context.params.followersId;
 
-
-        change.after.val();
-        functions.logger.log('Uppercasing', context.params.pushId, original);
-        const uppercase = original.toUpperCase();
+        const data = await admin.database.ref().child('user' + userId).get().then((snapshot) => {
+            functions.logger.info("SNAPSHOT" + snapshot.val());
+            return;
+        });
+        functions.logger.info("CHANGE" + change.after.val());
+        // functions.logger.log('Uppercasing', context.params.pushId, original);
+        // const uppercase = original.toUpperCase();
         // You must return a Promise when performing asynchronous tasks inside a Functions such as
         // writing to the Firebase Realtime Database.
         // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
-        return snapshot.ref.parent.child('uppercase').set(uppercase);
+        // return snapshot.ref.parent.child('uppercase').set(uppercase);
+
+        return;
     });

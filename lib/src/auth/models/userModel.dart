@@ -21,7 +21,7 @@ class UserModel {
       fullName: doc['fullName'],
       uid: doc['uid'],
       image: doc['image'],
-      posts: doc['posts'] ?? [],
+      posts: [...doc['posts']] ?? [],
       email: doc['email'],
       followers: doc['followers'] ?? [],
       followings: doc['followers'] ?? [],
