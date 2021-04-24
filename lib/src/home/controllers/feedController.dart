@@ -131,8 +131,9 @@ class FeedController extends GetxController {
           .value);
       posts.removeWhere((postFromList) => postFromList.postId == post.postId);
       List userPosts = authController.user.posts.toList();
-      userPosts
-          .removeWhere((postFromList) => postFromList.postId == post.postId);
+      userPosts.removeWhere((postFromList) => postFromList == post.postId);
+
+      log("USER POSTS === $userPosts");
 
       authController.user.posts = userPosts;
 
