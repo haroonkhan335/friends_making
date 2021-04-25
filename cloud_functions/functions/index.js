@@ -1,9 +1,6 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-
+admin.initializeApp();
 
 /* eslint-disable no-unused-vars */
 exports.helloWorld = functions.https.onRequest((request, response) => {
@@ -19,26 +16,37 @@ exports.helloWorldAnother = functions.https.onCall((request, response) => {
     return { "name": "Haroon", "skill": "Flutter Developer" };
 });
 
-exports.test = functions.database.ref('/user/{userId}/followers/{followersId}')
+exports.copyPostsFromFollowing = functions.database.ref('/user/{userId}/followings')
     .onUpdate(async (change, context) => {
-        // Grab the current value of what was written to the Realtime Database.
-        // const original = snapshot.val();
 
+        const userId = context.params.userId;
+        functions.logger.info('USER ID' + userId);
 
-        const userId = context.params.user;
-        const followersId = context.params.followersId;
+        const userData = (await admin.database().ref().child('user').child(userId).get()).val();
+        const followingId = userData.followings[userData.followings.length - 1];
+        try {
+            const followingUserData = (await admin.database().ref().child('user').child(followingId).get()).val();
+            var addedPosts = [];
+            if (userData.posts != null) {
+                for (var i = 0; i < userData.posts.length; i++) {
+                    addedPosts.push(String(userData.posts[i]));
+                }
+            } else {
+                console.log("USER POSTS NULL");
+            }
+            if (followingUserData.posts != null) {
+                for (var i = 0; i < followingUserData.posts.length; i++) {
+                    console.log("ID " + followingUserData.posts[i]);
+                    addedPosts.push(String(followingUserData.posts[i]));
+                }
+            } else {
+                console.log("FOLLOWING USER POSTS NULL!!!");
+            }
 
-        const data = await admin.database.ref().child('user' + userId).get().then((snapshot) => {
-            functions.logger.info("SNAPSHOT" + snapshot.val());
-            return;
-        });
-        functions.logger.info("CHANGE" + change.after.val());
-        // functions.logger.log('Uppercasing', context.params.pushId, original);
-        // const uppercase = original.toUpperCase();
-        // You must return a Promise when performing asynchronous tasks inside a Functions such as
-        // writing to the Firebase Realtime Database.
-        // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
-        // return snapshot.ref.parent.child('uppercase').set(uppercase);
+            await admin.database().ref().child('user').child(userId).update({ "posts": addedPosts });
 
+        } catch (e) {
+            functions.logger.error("ERROR === " + e);
+        }
         return;
     });
