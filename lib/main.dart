@@ -26,5 +26,7 @@ void main() async {
   //       .push();
   // }
   // await FirebaseAuth.instance.signOut();
+
+  //changes from Pasan
   runApp(App());
 }
