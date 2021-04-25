@@ -6,6 +6,7 @@ class UserModel {
   List followers = [];
   List followings = [];
   List posts = [];
+  String pushToken;
 
   UserModel(
       {this.fullName,
@@ -13,6 +14,7 @@ class UserModel {
       this.posts,
       this.followings,
       this.email,
+      this.pushToken,
       this.uid,
       this.image});
 
@@ -25,6 +27,7 @@ class UserModel {
       email: doc['email'],
       followers: doc['followers'] ?? [],
       followings: doc['followers'] ?? [],
+      pushToken: doc['pushToken'],
     );
   }
 
@@ -36,5 +39,6 @@ class UserModel {
         'followers': this.followers,
         'followings': this.followings,
         'posts': this.posts,
+        'pushToken': this.pushToken,
       };
 }

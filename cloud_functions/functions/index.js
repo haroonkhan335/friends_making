@@ -24,6 +24,7 @@ exports.copyPostsFromFollowing = functions.database.ref('/user/{userId}/followin
 
         const userData = (await admin.database().ref().child('user').child(userId).get()).val();
         const followingId = userData.followings[userData.followings.length - 1];
+
         try {
             const followingUserData = (await admin.database().ref().child('user').child(followingId).get()).val();
             var addedPosts = [];
