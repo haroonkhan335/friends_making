@@ -105,18 +105,32 @@ class _UsersToFollowState extends State<UsersToFollow> {
                                             ? controller.followers[index]
                                             : controller.followings[index];
                                         return ListTile(
-                                          leading: Container(
-                                            height: 50,
-                                            width: 50,
-                                            child: CachedNetworkImage(
-                                              imageUrl: user.image,
-                                              imageBuilder: (context, image) =>
-                                                  Image(image: image),
+                                            leading: Container(
+                                              height: 50,
+                                              width: 50,
+                                              child: CachedNetworkImage(
+                                                imageUrl: user.image,
+                                                imageBuilder:
+                                                    (context, image) =>
+                                                        Image(image: image),
+                                              ),
                                             ),
-                                          ),
-                                          title: Text(user.fullName),
-                                          subtitle: Text(user.email),
-                                        );
+                                            title: Text(user.fullName),
+                                            subtitle: Text(user.email),
+                                            trailing: controller.selectedTab ==
+                                                    TAB.Followings
+                                                ? Container(
+                                                    width: 70,
+                                                    height: 20,
+                                                    child: ElevatedButton(               //To DO
+                                                    onPressed: ()  {
+
+                                                       followController.unFollowUser(currentUser: Get.find<AuthController>().user, followingUser: user);
+
+                                                    },
+                                                    child: Text('Unfollow', style: TextStyle(fontSize: 8),),
+                                                  ))
+                                                : null);
                                       },
                                     ),
                         ),

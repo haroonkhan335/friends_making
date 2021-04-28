@@ -56,6 +56,7 @@ class FollowController extends GetxController {
   void followUser({UserModel followingUser, UserModel currentUser}) async {
     await repo.followUser(
         followingUser: followingUser, currentUser: currentUser);
+
     final listOfFollwers = [
       ...authController.user.followings,
       followingUser.uid
@@ -75,4 +76,24 @@ class FollowController extends GetxController {
     isLoading = false;
     update();
   }
+
+
+
+//TO DO 
+
+  void unFollowUser({UserModel currentUser, UserModel followingUser}) async {
+
+  try {
+
+    await repo.unFollowUser(currentUser, followingUser);
+    update();
+
+  } on Exception catch (e) {
+      print(e);
+  }
+
+  }
+
+
+
 }

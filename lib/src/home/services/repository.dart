@@ -61,6 +61,22 @@ class Repository {
     });
   }
 
+
+
+//To DO
+  Future<void> unFollowUser(UserModel currentUser, UserModel followingUser) async {
+
+  await userReference(currentUser.uid).update({
+      'followings': [...currentUser.followings, currentUser.followings.removeWhere((user) => user.uid == followingUser.uid)]
+  });
+
+  await userReference(followingUser.uid).update({
+       'followers': [...followingUser.followers, followingUser.followers.removeWhere((user) => user.uid == currentUser.uid)]
+  });
+  }
+
+
+
   Future<void> post({Post post}) async {
     log('USER POSTS ============ ${Get.find<AuthController>().user.posts}');
     await allPostRef.child(post.postId).set(post.toJson());

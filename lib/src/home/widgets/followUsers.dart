@@ -1,10 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:friends_making/src/auth/controllers/authController.dart';
 import 'package:friends_making/src/home/controllers/followController.dart';
+import 'package:friends_making/src/profile/screens/profilescreen.dart';
 import 'package:get/get.dart';
 
 class FollowUsers extends StatefulWidget {
+
+  
+  
   @override
   _FollowUsersState createState() => _FollowUsersState();
 }
@@ -19,6 +24,8 @@ class _FollowUsersState extends State<FollowUsers> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
         body: GetBuilder<FollowController>(
       builder: (controller) => Column(
@@ -52,15 +59,18 @@ class _FollowUsersState extends State<FollowUsers> {
                         leading: Container(
                           height: 60,
                           width: 60,
-                          child: CachedNetworkImage(
-                            imageUrl: user.image,
-                            imageBuilder: (context, image) => CircleAvatar(
-                              backgroundImage: image,
-                              radius: 30,
-                            ),
-                            errorWidget: (context, errorMessage, data) =>
-                                CircleAvatar(
-                              child: Icon(Icons.account_circle_outlined),
+                          child: GestureDetector(
+                              onTap: () {Get.to(ProfileScreen(user: user));},
+                              child: CachedNetworkImage(
+                              imageUrl: user.image,
+                              imageBuilder: (context, image) => CircleAvatar(
+                                backgroundImage: image,
+                                radius: 30,
+                              ),
+                              errorWidget: (context, errorMessage, data) =>
+                                  CircleAvatar(
+                                child: Icon(Icons.account_circle_outlined),
+                              ),
                             ),
                           ),
                         ),
