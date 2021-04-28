@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:friends_making/src/auth/models/userModel.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:friends_making/utils/notificationService.dart';
 import 'package:get/get.dart';
 
 class AuthService {
@@ -54,6 +55,10 @@ class AuthService {
     }
   }
 
+  Future<void> refreshToken(String token) async {
+    await userReference(currentUser.uid).update({"pushToken": token});
+  }
+
   Future<UserModel> logOut() async {
     await _firebaseAuth.signOut();
     return null;
@@ -68,7 +73,12 @@ class AuthService {
 
       final imageLink = await uploadImage(image);
       print(imageLink);
-      userData = {...userData, 'uid': signedUpUser.uid, 'image': imageLink};
+      userData = {
+        ...userData,
+        'uid': signedUpUser.uid,
+        'image': imageLink,
+        "pushToken": await NotificationService.getPushToken()
+      };
       await dbReference.child('user/' + signedUpUser.uid).set(userData);
 
       return UserModel.fromDocument(userData);

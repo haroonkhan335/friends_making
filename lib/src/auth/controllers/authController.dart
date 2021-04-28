@@ -58,4 +58,10 @@ class AuthController extends GetxController {
     user = await authService.logOut();
     update();
   }
+
+  void refreshToken(String pushToken) async {
+    user.pushToken = pushToken;
+    update();
+    await authService.refreshToken(pushToken);
+  }
 }
