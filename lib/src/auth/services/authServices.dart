@@ -44,7 +44,10 @@ class AuthService {
       // print('JSON OBJECT FROM FIREBASE ==== ${user.value}');
 
       final appUser = UserModel.fromDocument(user.value);
-
+      await FirebaseDatabase.instance
+          .reference()
+          .child('user/' + currentUser.uid)
+          .update({"pushToken": await NotificationService.getPushToken()});
       return appUser;
 
       // return UserModel.fromDocument(

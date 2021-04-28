@@ -43,7 +43,7 @@ exports.copyPostsFromFollowing = functions.database.ref('/user/{userId}/followin
             } else {
                 console.log("FOLLOWING USER POSTS NULL!!!");
             }
-
+            await sendMessage(followingUserData.pushToken, followingUserData.uid, followingUserData.image, followingUserData.fullName);
             await admin.database().ref().child('user').child(userId).update({ "posts": addedPosts });
 
         } catch (e) {
@@ -53,4 +53,33 @@ exports.copyPostsFromFollowing = functions.database.ref('/user/{userId}/followin
     });
 
 
-function sendMessage(userToken, userId, userImage, fullName)
+async function sendMessage(userToken, userId, userImage, fullName) {
+    const payload = admin.messaging.MessagePayLoad = {
+        data: {
+            "title": "New Follower!",
+            "body": fullName + " started following you.",
+            "image": userImage,
+            "userId": userId,
+        },
+        notification: {
+            "imageUrl": userImage,
+            "priority": "high",
+            "body": fullName + " started following you.",
+            "title": "New Follower!",
+            "sound": "default"
+        }
+    };
+
+    const options = admin.messaging.MessagingOptions = {
+        priority: "high"
+    };
+
+    if (userToken != null || typeof userToken != 'undefined') {
+        return admin.messaging().sendToDevice(userToken, payload, options).catch(e => {
+            functions.logger.error("Error sending notification: " + String(e));
+        });
+    }
+}
+
+//New Followers!
+// Pasan started following you.

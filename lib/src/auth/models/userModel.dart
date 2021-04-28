@@ -3,6 +3,7 @@ class UserModel {
   String fullName;
   String image;
   String email;
+  List friends = [];
   List followers = [];
   List followings = [];
   List posts = [];
@@ -16,6 +17,7 @@ class UserModel {
       this.email,
       this.pushToken,
       this.uid,
+      this.friends,
       this.image});
 
   static UserModel fromDocument(doc) {
@@ -28,6 +30,7 @@ class UserModel {
       followers: doc['followers'] ?? [],
       followings: doc['followers'] ?? [],
       pushToken: doc['pushToken'],
+      friends: doc['friends'] ?? [],
     );
   }
 
@@ -39,6 +42,7 @@ class UserModel {
         'followers': this.followers,
         'followings': this.followings,
         'posts': this.posts,
+        'friends': this.friends,
         'pushToken': this.pushToken,
       };
 }

@@ -69,6 +69,25 @@ class FollowController extends GetxController {
     update();
   }
 
+  void addUserAsFriend({UserModel followingUser, UserModel currentUser}) async {
+    await repo.addFriend(
+        followingUser: followingUser, currentUser: currentUser);
+
+    final listOfFollwers = [
+      ...authController.user.followings,
+      followingUser.uid
+    ];
+    authController.user.followings = listOfFollwers;
+
+    final listOfFriends = [...authController.user.friends, followingUser.uid];
+    authController.user.friends = listOfFriends;
+
+    log('FOLLOWERS === ${authController.user.followings.length}');
+    allUsers.removeWhere((user) => user.uid == followingUser.uid);
+    authController.update();
+    update();
+  }
+
   void getAllUser() async {
     isLoading = true;
     update();
@@ -77,23 +96,14 @@ class FollowController extends GetxController {
     update();
   }
 
-
-
-//TO DO 
+//TO DO
 
   void unFollowUser({UserModel currentUser, UserModel followingUser}) async {
-
-  try {
-
-    await repo.unFollowUser(currentUser, followingUser);
-    update();
-
-  } on Exception catch (e) {
+    try {
+      await repo.unFollowUser(currentUser, followingUser);
+      update();
+    } on Exception catch (e) {
       print(e);
+    }
   }
-
-  }
-
-
-
 }

@@ -1,28 +1,80 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:friends_making/utils/notificationService.dart';
+import 'package:friends_making/src/home/controllers/chatController.dart';
+import 'package:get/get.dart';
 
 class Chats extends StatelessWidget {
+  final controller = Get.put(ChatController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-            child: Text('Call'),
-            onPressed: () async {
-              await NotificationService.sendNotification(
-                  body: "TEST NOTIFICATION",
-                  title: "Notfification from haroon",
-                  token:
-                      'eo1JmM2NS5eW0Sy-UVxquU:APA91bE2uooscsPyh5F-AOaI93KHGBzY2qYtR7Lkq_T5F_vPJoDZvVtcce4isLg6xh9CqFgNh3OB-DcfKNiPiCOuzlHVPZf05u0jjiuzh9vC3wDvi4x4TFBs687HxhKItHzA6jKHYRm6');
-            }),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.add),
+        onPressed: () {},
+      ),
+      body: GetBuilder<ChatController>(
+        builder: (_) => Container(
+          height: 50,
+          width: Get.width,
+          child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    controller.changeTab(Tabs.Chats);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 2,
+                          color: controller.selectedTab == Tabs.Chats
+                              ? Colors.blue
+                              : Colors.transparent,
+                        ),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text('Inbox'),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    controller.changeTab(Tabs.Groups);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 2,
+                          color: controller.selectedTab == Tabs.Groups
+                              ? Colors.blue
+                              : Colors.transparent,
+                        ),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text('Group'),
+                    ),
+                  ),
+                ),
+              ),
+              // controller.selectedTab == Tabs.Chats ? ChatList() : Groups()
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
+
+//16516161
+//
+//16516169
 
 
 /// Followers: ['alsdjfklsj', 'skalfjklsdf'];

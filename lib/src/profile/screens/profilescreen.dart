@@ -2,20 +2,22 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:friends_making/src/auth/controllers/authController.dart';
 import 'package:friends_making/src/auth/models/userModel.dart';
+import 'package:friends_making/src/home/controllers/followController.dart';
 import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
-  
   UserModel user;
 
   ProfileScreen({this.user});
 
-  
+  final followingController = Get.find<FollowController>();
+
+  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
-  
     log("USER DP === ${user.image}");
     return Scaffold(
       body: Center(
@@ -82,8 +84,38 @@ class ProfileScreen extends StatelessWidget {
               width: 250,
               height: 30,
               child: ElevatedButton(
-                onPressed: () {},
-                child: Text('Follow'),
+                onPressed: () {
+                  followingController.followUser(
+                      followingUser: user, currentUser: authController.user);
+                },
+                child: GetBuilder<AuthController>(
+                    builder: (con) => Text(
+                        con.user.followings.contains(user.uid)
+                            ? 'Following'
+                            : 'Follow')),
+                style: ElevatedButton.styleFrom(primary: Colors.orangeAccent),
+              ),
+            ),
+            SizedBox(height: 30),
+            SizedBox(
+              width: 250,
+              height: 30,
+              child: ElevatedButton(
+                onPressed: () {
+                  followingController.addUserAsFriend(
+                      followingUser: user, currentUser: authController.user);
+                },
+                child: GetBuilder<AuthController>(
+                    builder: (con) => con.user.friends.contains(user.uid)
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Friends'),
+                              SizedBox(width: 10),
+                              Icon(Icons.check_circle, color: Colors.green)
+                            ],
+                          )
+                        : Text('Add Friend')),
                 style: ElevatedButton.styleFrom(primary: Colors.orangeAccent),
               ),
             ),
@@ -105,7 +137,9 @@ class ProfileScreen extends StatelessWidget {
                         TextButton(
                           onPressed: () {
                             Get.defaultDialog(
-                              title: 'Report User', titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                              title: 'Report User',
+                              titleStyle: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15),
                               content: Column(
                                 children: [
                                   TextButton(

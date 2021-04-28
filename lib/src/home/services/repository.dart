@@ -69,6 +69,36 @@ class Repository {
     await userReference(followingUser.uid).update({'followers': followers});
   }
 
+  Future<void> addFriend(
+      {UserModel followingUser, UserModel currentUser}) async {
+    List<String> followings = [...currentUser.followings];
+
+    List<String> followers = [...followingUser.followers];
+
+    List<String> myfriends = [...currentUser.friends, followingUser.uid];
+
+    List<String> followingUserfriends = [
+      ...followingUser.friends,
+      currentUser.uid
+    ];
+
+    followings.add(followingUser.uid);
+
+    followers.add(currentUser.uid);
+
+    currUser.followings = followings;
+    authController.update();
+
+    await userReference(currentUser.uid).update({'followings': followings});
+
+    await userReference(followingUser.uid).update({'followers': followers});
+
+    await userReference(currentUser.uid).update({'friends': myfriends});
+
+    await userReference(followingUser.uid)
+        .update({'friends': followingUserfriends});
+  }
+
 //To DO
   Future<void> unFollowUser(
       UserModel currentUser, UserModel followingUser) async {
