@@ -50,3 +50,6 @@ exports.copyPostsFromFollowing = functions.database.ref('/user/{userId}/followin
         }
         return;
     });
+
+
+function sendMessage(userToken, userId, userImage, fullName)
