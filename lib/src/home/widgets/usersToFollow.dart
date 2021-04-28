@@ -88,51 +88,64 @@ class _UsersToFollowState extends State<UsersToFollow> {
                               ],
                             )),
                         Expanded(
-                          child: controller.selectedTab == TAB.Followers &&
-                                  controller.followers.length == 0
-                              ? Center(child: Text('No Followers'))
-                              : controller.selectedTab == TAB.Followings &&
-                                      controller.followings.length == 0
-                                  ? Center(child: Text('No Followings'))
-                                  : ListView.builder(
-                                      itemCount: controller.selectedTab ==
-                                              TAB.Followers
-                                          ? controller.followers.length
-                                          : controller.followings.length,
-                                      itemBuilder: (context, index) {
-                                        final user = controller.selectedTab ==
+                          child: GetBuilder<AuthController>(
+                            builder: (_) => controller.selectedTab ==
+                                        TAB.Followers &&
+                                    controller.followers.length == 0
+                                ? Center(child: Text('No Followers'))
+                                : controller.selectedTab == TAB.Followings &&
+                                        controller.followings.length == 0
+                                    ? Center(child: Text('No Followings'))
+                                    : ListView.builder(
+                                        itemCount: controller.selectedTab ==
                                                 TAB.Followers
-                                            ? controller.followers[index]
-                                            : controller.followings[index];
-                                        return ListTile(
-                                            leading: Container(
-                                              height: 50,
-                                              width: 50,
-                                              child: CachedNetworkImage(
-                                                imageUrl: user.image,
-                                                imageBuilder:
-                                                    (context, image) =>
-                                                        Image(image: image),
+                                            ? controller.followers.length
+                                            : controller.followings.length,
+                                        itemBuilder: (context, index) {
+                                          final user = controller.selectedTab ==
+                                                  TAB.Followers
+                                              ? controller.followers[index]
+                                              : controller.followings[index];
+                                          return ListTile(
+                                              leading: Container(
+                                                height: 50,
+                                                width: 50,
+                                                child: CachedNetworkImage(
+                                                  imageUrl: user.image,
+                                                  imageBuilder:
+                                                      (context, image) =>
+                                                          Image(image: image),
+                                                ),
                                               ),
-                                            ),
-                                            title: Text(user.fullName),
-                                            subtitle: Text(user.email),
-                                            trailing: controller.selectedTab ==
-                                                    TAB.Followings
-                                                ? Container(
-                                                    width: 70,
-                                                    height: 20,
-                                                    child: ElevatedButton(               //To DO
-                                                    onPressed: ()  {
-
-                                                       followController.unFollowUser(currentUser: Get.find<AuthController>().user, followingUser: user);
-
-                                                    },
-                                                    child: Text('Unfollow', style: TextStyle(fontSize: 8),),
-                                                  ))
-                                                : null);
-                                      },
-                                    ),
+                                              title: Text(user.fullName),
+                                              subtitle: Text(user.email),
+                                              trailing:
+                                                  controller.selectedTab ==
+                                                          TAB.Followings
+                                                      ? Container(
+                                                          width: 70,
+                                                          height: 20,
+                                                          child: ElevatedButton(
+                                                            //To DO
+                                                            onPressed: () {
+                                                              followController.unFollowUser(
+                                                                  currentUser:
+                                                                      Get.find<
+                                                                              AuthController>()
+                                                                          .user,
+                                                                  followingUser:
+                                                                      user);
+                                                            },
+                                                            child: Text(
+                                                              'Unfollow',
+                                                              style: TextStyle(
+                                                                  fontSize: 8),
+                                                            ),
+                                                          ))
+                                                      : null);
+                                        },
+                                      ),
+                          ),
                         ),
                       ],
                     ),

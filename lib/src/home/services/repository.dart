@@ -23,7 +23,9 @@ class Repository {
 
   DatabaseReference get commentsRef => dbReference.child('comments');
 
-  UserModel get currUser => Get.find<AuthController>().user;
+  UserModel get currUser => authController.user;
+
+  AuthController get authController => Get.find<AuthController>();
 
   DatabaseReference postRef(String postId) =>
       dbReference.child('posts/' + postId);
@@ -52,30 +54,37 @@ class Repository {
 
   Future<void> followUser(
       {UserModel followingUser, UserModel currentUser}) async {
-    await userReference(currentUser.uid).update({
-      'followings': [...currentUser.followings, followingUser.uid]
-    });
+    List<String> followings = [...currentUser.followings];
+    List<String> followers = [...followingUser.followers];
 
-    await userReference(followingUser.uid).update({
-      'followers': [...followingUser.followers, currentUser.uid]
-    });
+    followings.add(followingUser.uid);
+
+    followers.add(currentUser.uid);
+
+    currUser.followings = followings;
+    authController.update();
+
+    await userReference(currentUser.uid).update({'followings': followings});
+
+    await userReference(followingUser.uid).update({'followers': followers});
   }
-
-
 
 //To DO
-  Future<void> unFollowUser(UserModel currentUser, UserModel followingUser) async {
+  Future<void> unFollowUser(
+      UserModel currentUser, UserModel followingUser) async {
+    List<String> followings = [...currentUser.followings];
+    List<String> followers = [...followingUser.followers];
 
-  await userReference(currentUser.uid).update({
-      'followings': [...currentUser.followings, currentUser.followings.removeWhere((user) => user.uid == followingUser.uid)]
-  });
+    currUser.followings = followings;
+    authController.update();
 
-  await userReference(followingUser.uid).update({
-       'followers': [...followingUser.followers, followingUser.followers.removeWhere((user) => user.uid == currentUser.uid)]
-  });
+    followings.remove(followingUser.uid);
+    followers.remove(currentUser.uid);
+
+    await userReference(currentUser.uid).update({'followings': followings});
+
+    await userReference(followingUser.uid).update({'followers': followers});
   }
-
-
 
   Future<void> post({Post post}) async {
     log('USER POSTS ============ ${Get.find<AuthController>().user.posts}');
