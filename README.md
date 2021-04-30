@@ -20,7 +20,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## 1) Library Imports
 
-- Import [firebase_messaging](https://pub.dev/packages/firebase_messaging) from [pub.dev] in pubspec.yaml
+- Import [firebase_messaging](https://pub.dev/packages/firebase_messaging) from [pub.dev](pub.dev) in pubspec.yaml
 - Import [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
 
 ## 2) Configure Android XML
@@ -34,6 +34,11 @@ samples, guidance on mobile development, and a full API reference.
     <category android:name="android.intent.category.DEFAULT" />
 </intent-filter>
 ```
+- For Flutter Local Notifications configuration, place the below code under "application" tag in AndroidManifest.xml file.
+```
+<meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="high_importance_channel" />
+```
+- The android:value which is "high_importance_channel" depends on the channel you create in Dart when configuring Flutter location Notifications (Documented under Dart Conifguration for Flutter Location Notification).
 ## 3) Configure Kotlin file.
 - Now go to project/android/app/src/main/kotlin/com/example/friends_making (the last route can depend on your package name for example, if your package name is com.company.someapp then the last route would be com/company/someapp)
 - Create a new file with name Application.kt
