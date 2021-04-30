@@ -11,32 +11,24 @@ import 'package:friends_making/src/profile/widgets/topBar.dart';
 import 'package:get/get.dart';
 
 class ProfileScreen extends StatefulWidget {
-
   UserModel user;
 
   ProfileScreen({this.user});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
-
 }
 
-
 class _ProfileScreenState extends State<ProfileScreen> {
-
   final controller = Get.put(ProfileController());
 
   final followingController = Get.find<FollowController>();
 
   final authController = Get.find<AuthController>();
 
-
-@override
+  @override
   void initState() {
-    
-    
-   // to do
-
+    // to do
 
     controller.loadPosts(widget.user.uid);
     controller.update();
@@ -44,10 +36,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     log("USER DP === ${widget.user.image}");
     print('number of posts ${controller.posts.length}');
 
@@ -61,18 +51,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 topBar(),
                 ProfileView(user: widget.user),
                 SizedBox(height: 10),
-               
               ],
             ),
-            Column(children: [ GetBuilder<ProfileController>(
-              builder: (_) => ListView.builder(
-                  itemCount: controller.posts.length, 
-                  itemBuilder: (context, index) {
-                    final post = controller.posts[index];
-                    return ListTile(title: Text(post.body),);
-
-                  }),
-            )])
+            Column(children: [
+              GetBuilder<ProfileController>(
+                builder: (_) => ListView.builder(
+                    itemCount: controller.posts.length,
+                    itemBuilder: (context, index) {
+                      final post = controller.posts[index];
+                      return ListTile(
+                        title: Text(post.body),
+                      );
+                    }),
+              )
+            ])
           ],
         ),
       ),

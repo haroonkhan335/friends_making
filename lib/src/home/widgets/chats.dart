@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:friends_making/src/chats/groupChats/groups.dart';
+import 'package:friends_making/src/chats/singleChats/friends.dart';
+import 'package:friends_making/src/chats/singleChats/inbox.dart';
 import 'package:friends_making/src/home/controllers/chatController.dart';
 import 'package:get/get.dart';
 
@@ -10,61 +13,69 @@ class Chats extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          if (controller.selectedTab == Tabs.Chats) {
+            Get.to(Friends());
+          } else {
+            print("GROUPS");
+            //TODO: Make a group
+          }
+        },
       ),
       body: GetBuilder<ChatController>(
-        builder: (_) => Container(
-          height: 50,
-          width: Get.width,
-          child: Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    controller.changeTab(Tabs.Chats);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 2,
-                          color: controller.selectedTab == Tabs.Chats
-                              ? Colors.blue
-                              : Colors.transparent,
+        builder: (_) => Column(
+          children: [
+            Container(
+              height: 50,
+              width: Get.width,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.changeTab(Tabs.Chats);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              width: 2,
+                              color: controller.selectedTab == Tabs.Chats ? Colors.blue : Colors.transparent,
+                            ),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text('Inbox'),
                         ),
                       ),
                     ),
-                    child: Center(
-                      child: Text('Inbox'),
-                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    controller.changeTab(Tabs.Groups);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 2,
-                          color: controller.selectedTab == Tabs.Groups
-                              ? Colors.blue
-                              : Colors.transparent,
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.changeTab(Tabs.Groups);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              width: 2,
+                              color: controller.selectedTab == Tabs.Groups ? Colors.blue : Colors.transparent,
+                            ),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text('Group'),
                         ),
                       ),
                     ),
-                    child: Center(
-                      child: Text('Group'),
-                    ),
                   ),
-                ),
+                  // controller.selectedTab == Tabs.Chats ? ChatList() : Groups()
+                ],
               ),
-              // controller.selectedTab == Tabs.Chats ? ChatList() : Groups()
-            ],
-          ),
+            ),
+            Expanded(child: controller.selectedTab == Tabs.Chats ? Inbox() : Groups())
+          ],
         ),
       ),
     );

@@ -8,6 +8,7 @@ class UserModel {
   List followings = [];
   List posts = [];
   String pushToken;
+  List chats = [];
 
   UserModel(
       {this.fullName,
@@ -17,6 +18,7 @@ class UserModel {
       this.email,
       this.pushToken,
       this.uid,
+      this.chats,
       this.friends,
       this.image});
 
@@ -31,6 +33,7 @@ class UserModel {
       followings: doc['followers'] ?? [],
       pushToken: doc['pushToken'],
       friends: doc['friends'] ?? [],
+      chats: doc['chats'] ?? [],
     );
   }
 
@@ -44,5 +47,6 @@ class UserModel {
         'posts': this.posts,
         'friends': this.friends,
         'pushToken': this.pushToken,
+        'chats': this.chats,
       };
 }
