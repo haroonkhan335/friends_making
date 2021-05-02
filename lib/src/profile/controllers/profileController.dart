@@ -14,15 +14,23 @@ class ProfileController extends GetxController {
     try {
       final List postIds = (await FirebaseDatabase.instance.reference().child('user/$uid/posts').once()).value;
 
-      log('post Ids: ${postIds}');
-      print('uid: $uid');
+      log('post Ids: $postIds');
+      
 
-      final post = Post.fromDocument(
-        (await FirebaseDatabase.instance.reference().child('posts/$postIds').once()).value,
+
+
+
+      for (String individualPostId in postIds){
+
+        final post = Post.fromDocument(
+        (await FirebaseDatabase.instance.reference().child('posts/$individualPostId').once()).value,
       );
-
-      print('post: $post');
-      posts.add(post);
+        posts.add(post);
+        update();
+        print('$posts');
+      }
+      
+      
       update();
     } catch (e) {
       print(e);

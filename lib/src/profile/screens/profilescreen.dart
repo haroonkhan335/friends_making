@@ -40,6 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     log("USER DP === ${widget.user.image}");
     print('number of posts ${controller.posts.length}');
+    print('posts from profile screen: ${controller.posts}');
 
     return Scaffold(
       body: Center(
@@ -48,23 +49,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Column(
               children: [
                 SizedBox(height: Get.size.height * 0.055),
-                topBar(),
+                TopBar(),
                 ProfileView(user: widget.user),
                 SizedBox(height: 10),
+                Container(
+                  child: GetBuilder<ProfileController>(
+                    builder: (_) => ListView.builder(
+                        itemCount: controller.posts.length,
+                        itemBuilder: (context, index) {
+                          final post = controller.posts[index];
+                          return ListTile(
+                            leading: Text(post.body),
+                            subtitle: Text('test text from code'),
+                          );
+                        }),
+                  ),
+                )
               ],
             ),
-            Column(children: [
-              GetBuilder<ProfileController>(
-                builder: (_) => ListView.builder(
-                    itemCount: controller.posts.length,
-                    itemBuilder: (context, index) {
-                      final post = controller.posts[index];
-                      return ListTile(
-                        title: Text(post.body),
-                      );
-                    }),
-              )
-            ])
           ],
         ),
       ),
