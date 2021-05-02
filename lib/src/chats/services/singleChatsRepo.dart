@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:friends_making/src/auth/controllers/authController.dart';
 import 'package:friends_making/src/auth/models/userModel.dart';
@@ -10,13 +12,15 @@ class SingleChatsRepo {
 
   UserModel get currentUser => Get.find<AuthController>().user;
 
+  AuthController get authController => Get.find<AuthController>();
+
   Future<List<UserModel>> getFriendsList() async {
     List<UserModel> friends = [];
-    final List friendsList = (await _firebaseDB.reference().child('user/' + currentUser.uid + "/friends").once()).value;
+    for (final friend in authController.user.friends) {
+      final friendDoc = (await userReference.child(friend.friendId).once()).value;
 
-    for (final friendId in friendsList) {
-      final friend = UserModel.fromDocument((await userReference.child(friendId).once()).value);
-      friends.add(friend);
+      final UserModel friendObject = UserModel.fromDocument(friendDoc);
+      friends.add(friendObject);
     }
     return friends;
   }

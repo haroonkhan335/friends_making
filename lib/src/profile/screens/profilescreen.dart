@@ -39,6 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     log("USER DP === ${widget.user.image}");
+    log("USER ID === ${widget.user.uid}");
     print('number of posts ${controller.posts.length}');
     print('posts from profile screen: ${controller.posts}');
 
@@ -46,27 +47,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Center(
         child: Column(
           children: [
-            Column(
-              children: [
-                SizedBox(height: Get.size.height * 0.055),
-                TopBar(),
-                ProfileView(user: widget.user),
-                SizedBox(height: 10),
-                Container(
-                  child: GetBuilder<ProfileController>(
-                    builder: (_) => ListView.builder(
-                        itemCount: controller.posts.length,
-                        itemBuilder: (context, index) {
-                          final post = controller.posts[index];
-                          return ListTile(
-                            leading: Text(post.body),
-                            subtitle: Text('test text from code'),
-                          );
-                        }),
-                  ),
-                )
-              ],
-            ),
+            Container(),
+            SizedBox(height: Get.size.height * 0.055),
+            TopBar(),
+            ProfileView(user: widget.user),
+            SizedBox(height: 10),
+            Expanded(
+              child: GetBuilder<ProfileController>(
+                builder: (_) => ListView.builder(
+                    itemCount: controller.posts.length,
+                    itemBuilder: (context, index) {
+                      final post = controller.posts[index];
+                      return ListTile(
+                        leading: Text(post.body),
+                        subtitle: Text('test text from code'),
+                      );
+                    }),
+              ),
+            )
           ],
         ),
       ),

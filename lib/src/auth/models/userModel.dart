@@ -1,9 +1,11 @@
+import 'dart:developer';
+
 class UserModel {
   String uid;
   String fullName;
   String image;
   String email;
-  List friends = [];
+  List<Friend> friends = [];
   List followers = [];
   List followings = [];
   List posts = [];
@@ -23,6 +25,19 @@ class UserModel {
       this.image});
 
   static UserModel fromDocument(doc) {
+    List<Friend> friendsList = [];
+    final friendDoc = doc['friends'];
+
+    log("FRIEND DOC === $friendDoc");
+
+    if (friendDoc != null) {
+      friendDoc.forEach((key, value) {
+        friendsList.add(Friend.fromJson(value));
+      });
+    }
+
+    log('FRIENDS LIST ${friendsList.length}');
+
     return UserModel(
       fullName: doc['fullName'],
       uid: doc['uid'],
@@ -32,7 +47,7 @@ class UserModel {
       followers: doc['followers'] ?? [],
       followings: doc['followers'] ?? [],
       pushToken: doc['pushToken'],
-      friends: doc['friends'] ?? [],
+      friends: friendsList,
       chats: doc['chats'] ?? [],
     );
   }
@@ -48,5 +63,34 @@ class UserModel {
         'friends': this.friends,
         'pushToken': this.pushToken,
         'chats': this.chats,
+      };
+}
+
+class Friend {
+  String friendId;
+  String chatId;
+  String image;
+  String name;
+  Friend({
+    this.chatId,
+    this.friendId,
+    this.image,
+    this.name,
+  });
+
+  factory Friend.fromJson(doc) {
+    return Friend(
+      chatId: doc['chatId'],
+      friendId: doc['friendId'],
+      image: doc['image'],
+      name: doc['name'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'chatId': this.chatId,
+        'friendId': this.friendId,
+        'image': this.image,
+        'name': this.name,
       };
 }

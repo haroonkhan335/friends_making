@@ -27,6 +27,15 @@ class FollowController extends GetxController {
 
   UserModel get currentUser => Get.find<AuthController>().user;
 
+  bool checkIfFriend(String friendId) {
+    bool isFriend = false;
+    for (final friend in currentUser.friends) {
+      if (friend.friendId == friendId) return true;
+      break;
+    }
+    return false;
+  }
+
   void getFollowers() async {
     if (!hasGottenFollowers) {
       isLoading = true;
@@ -54,13 +63,9 @@ class FollowController extends GetxController {
   }
 
   void followUser({UserModel followingUser, UserModel currentUser}) async {
-    await repo.followUser(
-        followingUser: followingUser, currentUser: currentUser);
+    await repo.followUser(followingUser: followingUser, currentUser: currentUser);
 
-    final listOfFollwers = [
-      ...authController.user.followings,
-      followingUser.uid
-    ];
+    final listOfFollwers = [...authController.user.followings, followingUser.uid];
     authController.user.followings = listOfFollwers;
 
     log('FOLLOWERS === ${authController.user.followings.length}');
@@ -70,17 +75,13 @@ class FollowController extends GetxController {
   }
 
   void addUserAsFriend({UserModel followingUser, UserModel currentUser}) async {
-    await repo.addFriend(
-        followingUser: followingUser, currentUser: currentUser);
+    await repo.addFriend(followingUser: followingUser, currentUser: currentUser);
 
-    final listOfFollwers = [
-      ...authController.user.followings,
-      followingUser.uid
-    ];
+    final listOfFollwers = [...authController.user.followings, followingUser.uid];
     authController.user.followings = listOfFollwers;
 
-    final listOfFriends = [...authController.user.friends, followingUser.uid];
-    authController.user.friends = listOfFriends;
+    // final listOfFriends = [...authController.user.friends, followingUser.uid];
+    // authController.user.friends = listOfFriends;
 
     log('FOLLOWERS === ${authController.user.followings.length}');
     allUsers.removeWhere((user) => user.uid == followingUser.uid);

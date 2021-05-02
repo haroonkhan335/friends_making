@@ -15,8 +15,7 @@ class Repository {
 
   final dbReference = realTDB.reference();
 
-  DatabaseReference userReference(String uid) =>
-      dbReference.child('user/' + uid);
+  DatabaseReference userReference(String uid) => dbReference.child('user/' + uid);
   DatabaseReference get users => dbReference.child('user');
 
   DatabaseReference get allPostRef => dbReference.child('posts');
@@ -27,8 +26,7 @@ class Repository {
 
   AuthController get authController => Get.find<AuthController>();
 
-  DatabaseReference postRef(String postId) =>
-      dbReference.child('posts/' + postId);
+  DatabaseReference postRef(String postId) => dbReference.child('posts/' + postId);
 
   Future<List<UserModel>> getFollowers() async {
     List<UserModel> followers = [];
@@ -52,8 +50,7 @@ class Repository {
     return followings;
   }
 
-  Future<void> followUser(
-      {UserModel followingUser, UserModel currentUser}) async {
+  Future<void> followUser({UserModel followingUser, UserModel currentUser}) async {
     List<String> followings = [...currentUser.followings];
     List<String> followers = [...followingUser.followers];
 
@@ -69,39 +66,55 @@ class Repository {
     await userReference(followingUser.uid).update({'followers': followers});
   }
 
-  Future<void> addFriend(
-      {UserModel followingUser, UserModel currentUser}) async {
+  Future<void> addFriend({UserModel followingUser, UserModel currentUser}) async {
     List<String> followings = [...currentUser.followings];
 
     List<String> followers = [...followingUser.followers];
 
-    List<String> myfriends = [...currentUser.friends, followingUser.uid];
+    // List<String> myfriends = [...currentUser.friends, followingUser.uid];
 
-    List<String> followingUserfriends = [
-      ...followingUser.friends,
-      currentUser.uid
-    ];
+    // List<String> followingUserfriends = [...followingUser.friends, currentUser.uid];
+
+    final chatId = DateTime.now().microsecondsSinceEpoch.toString();
+
+    final friend = Friend.fromJson({
+      'chatId': chatId,
+      'friendId': followingUser.uid,
+      'image': followingUser.image,
+      'name': followingUser.fullName,
+    });
+
+    await userReference(currentUser.uid).child('friends/${followingUser.uid}').update(friend.toJson());
+
+    await userReference(followingUser.uid).child('friends/${currentUser.uid}').update({
+      'chatId': chatId,
+      'friendId': currentUser.uid,
+      'image': currentUser.image,
+      'name': currentUser.fullName,
+    });
+
+    // currUser.friends.add(Friend.fromJson({"friendId": followingUser.uid, "chatId": chatId}));
 
     followings.add(followingUser.uid);
 
     followers.add(currentUser.uid);
 
     currUser.followings = followings;
+
+    currUser.friends.add(friend);
     authController.update();
 
     await userReference(currentUser.uid).update({'followings': followings});
 
     await userReference(followingUser.uid).update({'followers': followers});
 
-    await userReference(currentUser.uid).update({'friends': myfriends});
+    // await userReference(currentUser.uid).update({'friends': myfriends});
 
-    await userReference(followingUser.uid)
-        .update({'friends': followingUserfriends});
+    // await userReference(followingUser.uid).update({'friends': followingUserfriends});
   }
 
 //To DO
-  Future<void> unFollowUser(
-      UserModel currentUser, UserModel followingUser) async {
+  Future<void> unFollowUser(UserModel currentUser, UserModel followingUser) async {
     List<String> followings = [...currentUser.followings];
     List<String> followers = [...followingUser.followers];
 
