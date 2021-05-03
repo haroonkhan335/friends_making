@@ -3,22 +3,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:friends_making/src/auth/controllers/authController.dart';
 import 'package:friends_making/src/home/controllers/followController.dart';
+import 'package:friends_making/src/home/widgets/searchBar.dart';
 import 'package:friends_making/src/profile/screens/profilescreen.dart';
 import 'package:get/get.dart';
 
 class FollowUsers extends StatefulWidget {
 
-  
-  
   @override
   _FollowUsersState createState() => _FollowUsersState();
 }
 
 class _FollowUsersState extends State<FollowUsers> {
   final controller = Get.put(FollowController());
+  
   @override
   void initState() {
     controller.getAllUser();
+    controller.visibleUsers = controller.allUsers;
+    controller.update();
     super.initState();
   }
 
@@ -30,6 +32,8 @@ class _FollowUsersState extends State<FollowUsers> {
         body: GetBuilder<FollowController>(
       builder: (controller) => Column(
         children: [
+          SearchBar(),
+          SizedBox(height: Get.height*0.025),
           Expanded(
             child: controller.isLoading
                 ? Center(child: CircularProgressIndicator())

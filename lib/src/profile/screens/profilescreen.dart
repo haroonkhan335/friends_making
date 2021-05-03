@@ -9,6 +9,7 @@ import 'package:friends_making/src/profile/controllers/profileController.dart';
 import 'package:friends_making/src/profile/widgets/profileView.dart';
 import 'package:friends_making/src/profile/widgets/topBar.dart';
 import 'package:get/get.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ProfileScreen extends StatefulWidget {
   UserModel user;
@@ -59,9 +60,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     itemBuilder: (context, index) {
                       final post = controller.posts[index];
                       return ListTile(
-                        leading: Text(post.body),
-                        subtitle: Text('test text from code'),
-                      );
+                          leading: Container(
+                            height: 60,
+                            width: 60,
+                            child: CachedNetworkImage(
+                                imageUrl: post.posterProfilePicture,
+                                imageBuilder: (_, image) => CircleAvatar(
+                                      backgroundImage: image,
+                                      radius: 30,
+                                    )),
+                          ),
+                          title: Text(post.posterFullName),
+                          subtitle: Text(post.body),
+                          trailing: Text(
+                            timeago.format(
+                              DateTime.fromMicrosecondsSinceEpoch(
+                                int.parse(post.postTime),
+                              ),
+                            ),
+                          ),
+                        );
                     }),
               ),
             )
@@ -71,3 +89,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
+
+

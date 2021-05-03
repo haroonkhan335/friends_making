@@ -25,6 +25,10 @@ class FollowController extends GetxController {
 
   List<UserModel> allUsers = [];
 
+  List<UserModel> visibleUsers = [];
+
+  
+
   UserModel get currentUser => Get.find<AuthController>().user;
 
   bool checkIfFriend(String friendId) {
