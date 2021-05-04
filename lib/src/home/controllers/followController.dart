@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:friends_making/src/auth/controllers/authController.dart';
 import 'package:friends_making/src/auth/models/userModel.dart';
 import 'package:friends_making/src/home/services/repository.dart';
@@ -27,7 +28,7 @@ class FollowController extends GetxController {
 
   List<UserModel> visibleUsers = [];
 
-  
+  TextEditingController searchController = TextEditingController();
 
   UserModel get currentUser => Get.find<AuthController>().user;
 

@@ -13,8 +13,7 @@ class AuthService {
 
   final dbReference = realTDB.reference();
 
-  DatabaseReference userReference(String uid) =>
-      dbReference.child('user/' + uid);
+  DatabaseReference userReference(String uid) => dbReference.child('user/' + uid);
 
   User get currentUser => _firebaseAuth.currentUser;
 
@@ -27,19 +26,14 @@ class AuthService {
 
     print(data.value.runtimeType);
 
-    return UserModel.fromDocument(
-        (await userReference(currentUser.uid).once()).value);
+    return UserModel.fromDocument((await userReference(currentUser.uid).once()).value);
   }
 
   Future<UserModel> login(String email, String password) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
 
-      final user = await FirebaseDatabase.instance
-          .reference()
-          .child('user/' + currentUser.uid)
-          .once();
+      final user = await FirebaseDatabase.instance.reference().child('user/' + currentUser.uid).once();
 
       // print('JSON OBJECT FROM FIREBASE ==== ${user.value}');
 
@@ -67,15 +61,13 @@ class AuthService {
     return null;
   }
 
-  Future<UserModel> signUpUser(String email, String password,
-      {File image, Map<String, dynamic> userData}) async {
+  Future<UserModel> signUpUser(String email, String password, {File image, Map<String, dynamic> userData}) async {
     try {
-      final signedUpUser = (await _firebaseAuth.createUserWithEmailAndPassword(
-              email: email, password: password))
-          .user;
+      final signedUpUser = (await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password)).user;
 
       final imageLink = await uploadImage(image);
       print(imageLink);
+
       userData = {
         ...userData,
         'uid': signedUpUser.uid,
@@ -91,8 +83,7 @@ class AuthService {
   }
 
   Future<String> uploadImage(File image) async {
-    final storageReference =
-        FirebaseStorage.instance.ref('profilePictures/${currentUser.uid}');
+    final storageReference = FirebaseStorage.instance.ref('profilePictures/${currentUser.uid}');
 
     await storageReference.putFile(image);
 

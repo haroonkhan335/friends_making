@@ -15,18 +15,33 @@ void main() async {
   await Firebase.initializeApp();
   await NotificationService.initFcm();
 
-  // FirebaseDatabase.instance
-  //     .reference()
-  //     .child('user/pXn7F6EU7ePjpWA2Ogl2Tp0AhSE2')
-  //     .child('friends/askdfjlkanv29830')
-  //     .update({
-  //   "friendId": "askdfjlkanv29830",
-  //   "chatId": "askldjflk234",
+  // FirebaseDatabase.instance.reference().child('chats/ksdjlk2jlk23').set({
+  //   "chatId": "ksdjlk2jlk23",
+  //   "members": {
+  //     "pXn7F6EU7ePjpWA2Ogl2Tp0AhSE2": true,
+  //     "lakjdflkasjdfkl": true,
+  //   },
   // });
-  //
-  final user = await FirebaseDatabase.instance.reference().child('user/pXn7F6EU7ePjpWA2Ogl2Tp0AhSE2').once();
+  // FirebaseDatabase.instance.reference().child('chats/5sd6f46a5sd4f6').set({
+  //   "chatId": "ksdjlk2jlk23",
+  //   "members": {
+  //     "k23jh4kksjafh": true,
+  //     "lakjdflkasjdfkl": true,
+  //   },
+  // });
 
-  print("USER === ${jsonDecode(jsonEncode(user.value))}");
+  print("DATE ${DateTime.now().microsecondsSinceEpoch}");
+
+  final dumm = await FirebaseDatabase.instance.reference().child('chats').child('members').once();
+
+  dumm.value.forEach((e, v) {
+    print("V $v  ${DateTime.fromMicrosecondsSinceEpoch(v['time'])}");
+  });
+
+  // final user =
+  //     await FirebaseDatabase.instance.reference().child('/pXn7F6EU7ePjpWA2Ogl2Tp0AhSE2').equalTo(true).once();
+
+  // print("USER === ${jsonDecode(jsonEncode(user.value))}");
 
   runApp(App());
 }

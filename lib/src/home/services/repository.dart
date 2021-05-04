@@ -82,6 +82,7 @@ class Repository {
       'friendId': followingUser.uid,
       'image': followingUser.image,
       'name': followingUser.fullName,
+      'status': 4,
     });
 
     await userReference(currentUser.uid).child('friends/${followingUser.uid}').update(friend.toJson());
@@ -91,6 +92,7 @@ class Repository {
       'friendId': currentUser.uid,
       'image': currentUser.image,
       'name': currentUser.fullName,
+      'status': 4,
     });
 
     // currUser.friends.add(Friend.fromJson({"friendId": followingUser.uid, "chatId": chatId}));

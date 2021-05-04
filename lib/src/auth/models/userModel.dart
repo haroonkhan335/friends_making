@@ -66,16 +66,26 @@ class UserModel {
       };
 }
 
+enum FriendStatus { Pending, Accepted, Rejected }
+
 class Friend {
+  /* 
+    status: 0 = 'pending'
+    status: 1 = 'accepted',
+    status: 2 = Rejected
+  */
+
   String friendId;
   String chatId;
   String image;
   String name;
+  FriendStatus friendStatus;
   Friend({
     this.chatId,
     this.friendId,
     this.image,
     this.name,
+    this.friendStatus,
   });
 
   factory Friend.fromJson(doc) {
@@ -84,12 +94,24 @@ class Friend {
       friendId: doc['friendId'],
       image: doc['image'],
       name: doc['name'],
+      friendStatus: evaluateStatus(doc['friendStatus']),
     );
+  }
+
+  static FriendStatus evaluateStatus(String status) {
+    if (status == 'pending') {
+      return FriendStatus.Pending;
+    } else if (status == 'accepted') {
+      return FriendStatus.Accepted;
+    } else if (status == 'rejected') {
+      return FriendStatus.Rejected;
+    }
   }
 
   Map<String, dynamic> toJson() => {
         'chatId': this.chatId,
         'friendId': this.friendId,
+        'friendStatus': this.friendStatus.toString().toLowerCase(),
         'image': this.image,
         'name': this.name,
       };
