@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class Chat {
   String chatId;
   String recentMessage;
@@ -16,8 +18,10 @@ class Chat {
   factory Chat.fromDocument(doc) {
     List<ChatMember> chatMembers = [];
     final members = doc['chatMembers'];
+    print("MEMBERS $members");
     if (members != null) {
       members.forEach((key, value) {
+        log("VALUE $value");
         chatMembers.add(ChatMember.fromDocument(value));
       });
     }
@@ -31,13 +35,20 @@ class Chat {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        "chatId": this.chatId,
-        "recentMessage": this.recentMessage,
-        "lastUpdateTime": this.lastUpdateTime,
-        "createdAt": this.createdAt,
-        "chatMembers": this.chatMembers,
-      };
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> members = {};
+
+    for (final ChatMember member in this.chatMembers) {
+      members[member.id] = member.toJson();
+    }
+    return {
+      "chatId": this.chatId,
+      "recentMessage": this.recentMessage,
+      "lastUpdateTime": this.lastUpdateTime,
+      "createdAt": this.createdAt,
+      "chatMembers": members,
+    };
+  }
 }
 
 class ChatMember {
@@ -58,4 +69,10 @@ class ChatMember {
       name: doc['name'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'image': image,
+        'name': name,
+      };
 }
