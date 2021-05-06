@@ -13,13 +13,23 @@ class Chat {
     this.chatMembers,
   });
 
-  factory Chat.fromDocument(doc) => Chat(
-        chatId: doc['chatId'],
-        recentMessage: doc['recentMessage'],
-        lastUpdateTime: doc['lastUpdateTime'],
-        createdAt: doc['createdAt'],
-        chatMembers: doc['chatMembers'],
-      );
+  factory Chat.fromDocument(doc) {
+    List<ChatMember> chatMembers = [];
+    final members = doc['chatMembers'];
+    if (members != null) {
+      members.forEach((key, value) {
+        chatMembers.add(ChatMember.fromDocument(value));
+      });
+    }
+    print("CHAT MEMBERS $chatMembers");
+    return Chat(
+      chatId: doc['chatId'],
+      recentMessage: doc['recentMessage'],
+      lastUpdateTime: doc['lastUpdateTime'],
+      createdAt: doc['createdAt'],
+      chatMembers: chatMembers,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "chatId": this.chatId,
@@ -28,4 +38,24 @@ class Chat {
         "createdAt": this.createdAt,
         "chatMembers": this.chatMembers,
       };
+}
+
+class ChatMember {
+  String id;
+  String image;
+  String name;
+
+  ChatMember({
+    this.id,
+    this.image,
+    this.name,
+  });
+
+  factory ChatMember.fromDocument(doc) {
+    return ChatMember(
+      id: doc['id'],
+      image: doc['image'],
+      name: doc['name'],
+    );
+  }
 }
