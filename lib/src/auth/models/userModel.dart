@@ -27,17 +27,11 @@ class UserModel {
   static UserModel fromDocument(doc) {
     List<Friend> friendsList = [];
     final friendDoc = doc['friends'];
-
-    log("FRIEND DOC === $friendDoc");
-
     if (friendDoc != null) {
       friendDoc.forEach((key, value) {
         friendsList.add(Friend.fromJson(value));
       });
     }
-
-    log('FRIENDS LIST ${friendsList.length}');
-
     return UserModel(
       fullName: doc['fullName'],
       uid: doc['uid'],

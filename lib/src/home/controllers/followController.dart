@@ -6,6 +6,7 @@ import 'package:friends_making/src/auth/controllers/authController.dart';
 import 'package:friends_making/src/auth/models/userModel.dart';
 import 'package:friends_making/src/home/services/repository.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 enum TAB { Followers, Followings }
 
@@ -28,9 +29,18 @@ class FollowController extends GetxController {
 
   List<UserModel> visibleUsers = [];
 
+  RefreshController refreshController = RefreshController();
+
   TextEditingController searchController = TextEditingController();
 
+  int offset = 10;
+
   UserModel get currentUser => Get.find<AuthController>().user;
+
+  void refreshUsers() async {
+    offset += 10;
+    await getRefreshUsers(offset);
+  }
 
   bool checkIfFriend(String friendId) {
     bool isFriend = false;
@@ -97,8 +107,16 @@ class FollowController extends GetxController {
   void getAllUser() async {
     isLoading = true;
     update();
-    allUsers = await repo.allUsers();
+    allUsers = await repo.allUsers(offset: 10);
+    log('LENGTH OF ALL USERS == ${allUsers.length}');
     isLoading = false;
+    update();
+  }
+
+  Future<void> getRefreshUsers(int offset) async {
+    allUsers = await repo.allUsers(offset: offset);
+
+    print("REFRESH USERS LIST ==== ${allUsers.length}");
     update();
   }
 

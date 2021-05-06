@@ -1,12 +1,12 @@
 class Chat {
-  String chatid;
+  String chatId;
   String recentMessage;
-  String lastUpdateTime;
+  int lastUpdateTime;
   String createdAt;
   List chatMembers;
 
   Chat({
-    this.chatid,
+    this.chatId,
     this.recentMessage,
     this.lastUpdateTime,
     this.createdAt,
@@ -14,7 +14,7 @@ class Chat {
   });
 
   factory Chat.fromDocument(doc) => Chat(
-        chatid: doc['chatid'],
+        chatId: doc['chatId'],
         recentMessage: doc['recentMessage'],
         lastUpdateTime: doc['lastUpdateTime'],
         createdAt: doc['createdAt'],
@@ -22,7 +22,7 @@ class Chat {
       );
 
   Map<String, dynamic> toJson() => {
-        "chatid": this.chatid,
+        "chatId": this.chatId,
         "recentMessage": this.recentMessage,
         "lastUpdateTime": this.lastUpdateTime,
         "createdAt": this.createdAt,

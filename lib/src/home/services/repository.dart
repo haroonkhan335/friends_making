@@ -132,11 +132,17 @@ class Repository {
   }
 
   Future<void> post({Post post}) async {
-    log('USER POSTS ============ ${Get.find<AuthController>().user.posts}');
-    await allPostRef.child(post.postId).set(post.toJson());
-    await userReference(currUser.uid).update({
-      'posts': [...currUser.posts, post.postId],
-    });
+    try {
+      // authController.user.posts.add(post);
+      // authController.update();
+      log('USER POSTS ============ ${Get.find<AuthController>().user.posts.length}');
+      await allPostRef.child(post.postId).set(post.toJson());
+      await userReference(currUser.uid).update({
+        'posts': [...currUser.posts, post.postId],
+      });
+    } catch (e) {
+      log('ERROR: $e === ${e.runtimeType}');
+    }
   }
 
   Future<void> likePost(Post post) async {
@@ -161,9 +167,9 @@ class Repository {
     });
   }
 
-  Future<List<UserModel>> allUsers() async {
+  Future<List<UserModel>> allUsers({int offset}) async {
     List<UserModel> allUsers = [];
-    final usersFromDB = await users.once();
+    final usersFromDB = await users.limitToFirst(offset).once();
 
     usersFromDB.value.forEach((key, value) {
       allUsers.add(UserModel.fromDocument(value));

@@ -1,5 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:friends_making/src/auth/controllers/authController.dart';
 import 'package:friends_making/src/auth/models/userModel.dart';
 import 'package:friends_making/src/chats/models/message.dart';
@@ -7,7 +7,7 @@ import 'package:friends_making/src/chats/services/singleChatsRepo.dart';
 import 'package:get/get.dart';
 
 class SingleChatsController extends GetxController {
-  List<UserModel> friends = [];
+  List<Friend> friends = [];
 
   SingleChatsRepo repo = SingleChatsRepo();
 
@@ -19,26 +19,12 @@ class SingleChatsController extends GetxController {
 
   final authController = Get.find<AuthController>();
 
-  void getFriends() async {
-    isLoading = true;
-    update();
-    friends = await repo.getFriendsList();
+  UserModel get currentUser => authController.user;
 
-    isLoading = false;
-    update();
-  }
+  TextEditingController messageController = TextEditingController();
 
-  void getToChat(UserModel friend) async {
-    for (final chatId in authController.user.chats) {
-      if (chatId.contains(authController.user.uid) && chatId.contains(friend.uid)) {
-        streamChat(chatId);
-        chatFound = true;
-      }
-    }
-
-    if (!chatFound) {
-      createChat(friend);
-    }
+  void getMessages(Friend friend) async {
+    FirebaseDatabase.instance.reference().child('messages').child(friend.chatId).onChildAdded.listen((event) {});
   }
 
   void streamChat(String chatId) async {
@@ -63,19 +49,11 @@ class SingleChatsController extends GetxController {
     };
     await FirebaseDatabase.instance.reference().child('chats').child(chatId).set(chatDocument);
   }
-}
 
-//CHAT MAIN
-//
-//
-// "alskfjklasd": {
-// id: asl;dkj,
-// lastContent: 'sadfsdf'
-// }
-// 
-// 
-// USER DOC
-// 
-// "userDoc": {
-//  chatsList" [asdfsdfaasd]
-// }
+  Future<void> sendMessage(Friend friend) async {
+    if (messageController.text.isNotEmpty) {
+      await repo.sendMessage(friend, messageController.text);
+      messageController.clear();
+    }
+  }
+}

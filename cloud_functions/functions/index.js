@@ -81,5 +81,28 @@ async function sendMessage(userToken, userId, userImage, fullName) {
     }
 }
 
-//New Followers!
-// Pasan started following you.
+exports.onNewMessage = functions.database.ref('messages/{chatId}/{messageId}').onCreate(async (snapshot) => {
+    const chatId = context.params.chatId;
+    const messageId = context.params.messageId;
+
+    const messageData = snapshot.val();
+
+    if (messageData == null) return;
+
+    await admin.database().ref().child('userChats').child(userId).child(chatId).set({
+        "chatid": chatId,
+        "recentMessage": messageData.content,
+        "lastUpdateTime": messageData.messageTime,
+        "chatMembers": [messageData.senderId, messageData.receiverId],
+    });
+    await admin.database().ref().child('userChats').child(messageData.receiverId).child(chatId).set({
+        "chatid": chatId,
+        "recentMessage": messageData.content,
+        "lastUpdateTime": messageData.messageTime,
+        "chatMembers": [messageData.senderId, messageData.receiverId],
+    });
+
+
+
+});
+
