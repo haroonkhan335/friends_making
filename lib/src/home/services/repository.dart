@@ -67,48 +67,52 @@ class Repository {
   }
 
   Future<void> addFriend({UserModel followingUser, UserModel currentUser}) async {
-    List<String> followings = [...currentUser.followings];
+    final doc = (await userReference(currentUser.uid).child('friends/${followingUser.uid}').once()).value;
 
-    List<String> followers = [...followingUser.followers];
+    if (doc == null) {
+      List<String> followings = [...currentUser.followings];
 
-    // List<String> myfriends = [...currentUser.friends, followingUser.uid];
+      List<String> followers = [...followingUser.followers];
 
-    // List<String> followingUserfriends = [...followingUser.friends, currentUser.uid];
+      // List<String> myfriends = [...currentUser.friends, followingUser.uid];
 
-    final chatId = DateTime.now().microsecondsSinceEpoch.toString();
+      // List<String> followingUserfriends = [...followingUser.friends, currentUser.uid];
 
-    final friend = Friend.fromJson({
-      'chatId': chatId,
-      'friendId': followingUser.uid,
-      'image': followingUser.image,
-      'name': followingUser.fullName,
-      'status': 4,
-    });
+      final chatId = DateTime.now().microsecondsSinceEpoch.toString();
 
-    await userReference(currentUser.uid).child('friends/${followingUser.uid}').update(friend.toJson());
+      final friend = Friend.fromJson({
+        'chatId': chatId,
+        'friendId': followingUser.uid,
+        'image': followingUser.image,
+        'name': followingUser.fullName,
+        'status': 4,
+      });
 
-    await userReference(followingUser.uid).child('friends/${currentUser.uid}').update({
-      'chatId': chatId,
-      'friendId': currentUser.uid,
-      'image': currentUser.image,
-      'name': currentUser.fullName,
-      'status': 4,
-    });
+      await userReference(currentUser.uid).child('friends/${followingUser.uid}').update(friend.toJson());
 
-    // currUser.friends.add(Friend.fromJson({"friendId": followingUser.uid, "chatId": chatId}));
+      await userReference(followingUser.uid).child('friends/${currentUser.uid}').update({
+        'chatId': chatId,
+        'friendId': currentUser.uid,
+        'image': currentUser.image,
+        'name': currentUser.fullName,
+        'status': 4,
+      });
 
-    followings.add(followingUser.uid);
+      // currUser.friends.add(Friend.fromJson({"friendId": followingUser.uid, "chatId": chatId}));
 
-    followers.add(currentUser.uid);
+      followings.add(followingUser.uid);
 
-    currUser.followings = followings;
+      followers.add(currentUser.uid);
 
-    currUser.friends.add(friend);
-    authController.update();
+      currUser.followings = followings;
 
-    await userReference(currentUser.uid).update({'followings': followings});
+      currUser.friends.add(friend);
+      authController.update();
 
-    await userReference(followingUser.uid).update({'followers': followers});
+      await userReference(currentUser.uid).update({'followings': followings});
+
+      await userReference(followingUser.uid).update({'followers': followers});
+    }
 
     // await userReference(currentUser.uid).update({'friends': myfriends});
 
