@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:friends_making/common/appDrawer.dart';
 import 'package:friends_making/src/auth/controllers/authController.dart';
 import 'package:friends_making/src/home/controllers/homeController.dart';
-import 'package:friends_making/utils/pages.dart';
 import 'package:get/get.dart';
 import 'package:friends_making/src/home/widgets/bottomNavigation.dart';
 
@@ -11,17 +11,17 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: AppDrawer(),
       bottomNavigationBar: BottomNavigation(),
       appBar: AppBar(
-        title: Text('Home'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              authController.logOut();
-            },
-          )
-        ],
+        title: GetBuilder<HomeController>(
+          // id: 0,
+          builder: (_) => Text(controller.currentScreen == HomeScreens.Home
+              ? 'Home'
+              : controller.currentScreen == HomeScreens.Chats
+                  ? 'Chats'
+                  : 'Profile'),
+        ),
       ),
       body: Center(
         child: Column(

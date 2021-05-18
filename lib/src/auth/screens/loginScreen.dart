@@ -36,17 +36,27 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 30),
-                TextFormField(
-                  validator: (v) {
-                    if (v.length == 0 || v.length < 3) {
-                      return 'Password\'s length must be greater than 3';
-                    }
-                    return null;
-                  },
-                  controller: authController.passwordController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Password',
+                GetBuilder<AuthController>(
+                  builder: (_) => TextFormField(
+                    obscureText: authController.isHiddenPassword,
+                    validator: (v) {
+                      if (v.length == 0 || v.length < 3) {
+                        return 'Password\'s length must be greater than 3';
+                      }
+                      return null;
+                    },
+                    controller: authController.passwordController,
+                    decoration: InputDecoration(
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          authController.isHiddenPassword = !authController.isHiddenPassword;
+                          authController.update();
+                        },
+                        child: Icon(Icons.remove_red_eye),
+                      ),
+                      border: OutlineInputBorder(),
+                      hintText: 'Password',
+                    ),
                   ),
                 ),
                 SizedBox(height: 50),

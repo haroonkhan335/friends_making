@@ -15,6 +15,8 @@ class AuthController extends GetxController {
 
   UserModel user;
 
+  bool isHiddenPassword = true;
+
   bool isAuthenticationCompleted = false;
 
   AuthService authService = AuthService();
@@ -26,8 +28,7 @@ class AuthController extends GetxController {
   }
 
   void login() async {
-    this.user =
-        await authService.login(emailController.text, passwordController.text);
+    this.user = await authService.login(emailController.text, passwordController.text);
     update();
   }
 
@@ -38,18 +39,11 @@ class AuthController extends GetxController {
 
   void signUp() async {
     if (pickedFile == null) {
-      Get.snackbar('', '',
-          titleText: Text('Please select an image',
-              style: TextStyle(color: Colors.red)));
+      Get.snackbar('', '', titleText: Text('Please select an image', style: TextStyle(color: Colors.red)));
       return;
     }
-    user = await authService.signUpUser(
-        emailController.text, passwordController.text,
-        image: pickedFile,
-        userData: {
-          'fullName': fullNameController.text,
-          'email': emailController.text
-        });
+    user = await authService.signUpUser(emailController.text, passwordController.text,
+        image: pickedFile, userData: {'fullName': fullNameController.text, 'email': emailController.text});
     if (user != null) Get.back();
     update();
   }
