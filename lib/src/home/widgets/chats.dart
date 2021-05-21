@@ -18,11 +18,10 @@ class Chats extends StatelessWidget {
         onPressed: () {
           if (controller.selectedTab == Tabs.Chats) {
             Get.to(Friends());
-          } 
-          if (controller.selectedTab == Tabs.Groups){
-            Get.to(GroupFriends());
           }
-          else {
+          if (controller.selectedTab == Tabs.Groups) {
+            Get.to(GroupFriends());
+          } else {
             print("GROUPS");
             //TODO: Make a group
           }

@@ -8,18 +8,21 @@ import 'package:get/get.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class GroupInbox extends StatelessWidget {
-
   final controller = Get.put(GroupChatsController());
 
   @override
   Widget build(BuildContext context) {
-    print("ROUTE  ${Get.currentRoute.runtimeType}");
+    print("ROUTE  ${Get.currentRoute}");
     return Column(
       children: [
         Expanded(
             child: StreamBuilder(
-                stream:
-                    FirebaseDatabase.instance.reference().child('groupMessagesofAllUsers').child(controller.currentUser.uid).child('groupChatsDetails').onValue,
+                stream: FirebaseDatabase.instance
+                    .reference()
+                    .child('groupMessagesofAllUsers')
+                    .child(controller.currentUser.uid)
+                    .child('groupChatsDetails')
+                    .onValue,
                 builder: (_, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     List<GroupChat> chats = [];
@@ -31,10 +34,7 @@ class GroupInbox extends StatelessWidget {
 
                     docs.forEach((key, value) {
                       chats.add(GroupChat.fromDocument(value));
-                      
                     });
-
-                    
 
                     print("CHATS LIST == ${chats.length}");
 
@@ -44,7 +44,7 @@ class GroupInbox extends StatelessWidget {
                         itemCount: chats.length,
                         itemBuilder: (_, i) {
                           final chat = chats[i];
-                          final chatRef = chats[i].chatId;     //*! to pass chatRef to send to next screen
+                          final chatRef = chats[i].chatId; //*! to pass chatRef to send to next screen
 
                           // GroupChatMember otherMember = chat.chatMembers
                           //     .where((member) => member.id != controller.currentUser.uid)
@@ -53,8 +53,9 @@ class GroupInbox extends StatelessWidget {
 
                           return ListTile(
                             onTap: () {
-                              
-                              Get.to(GroupChatScreen(chatRef: chatRef,));  //*! passing chatRef to next screen
+                              Get.to(GroupChatScreen(
+                                chatRef: chatRef,
+                              )); //*! passing chatRef to next screen
                             },
                             leading: Container(
                               height: 50,

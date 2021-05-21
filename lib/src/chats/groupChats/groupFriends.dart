@@ -12,25 +12,22 @@ class GroupFriends extends StatefulWidget {
 }
 
 class _GroupFriendsState extends State<GroupFriends> {
-
- 
-
-
-  final controller = Get.put(GroupChatsController());
-
-
- 
+  final controller = Get.find<GroupChatsController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Friends'),
-        ),
-        body: Column(children: [
-          SizedBox(height: Get.height*0.10),
-          Text('Who do you want to talk to today?', style: TextStyle(color: Colors.blueGrey),),
-          SizedBox(height: Get.height*0.05),
+      appBar: AppBar(
+        title: Text('Friends'),
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: Get.height * 0.10),
+          Text(
+            'Who do you want to talk to today?',
+            style: TextStyle(color: Colors.blueGrey),
+          ),
+          SizedBox(height: Get.height * 0.05),
           Expanded(
             child: GetBuilder<GroupChatsController>(
               builder: (_) => controller.currentUser.friends.length == 0
@@ -42,23 +39,31 @@ class _GroupFriendsState extends State<GroupFriends> {
                         final user = controller.currentUser.friends[index];
 
                         return FilterChipWidgett(friendChip: user);
-                        
                       },
                       itemCount: controller.currentUser.friends.length,
                     ),
             ),
           ),
-          ElevatedButton(onPressed: (){
-            final chatRefFromUi = Uuid().v1();
-            
-            controller.chatReference = chatRefFromUi;
-            controller.update();
-            controller.createGroupChats(chatRefFromUi);
-            Get.to(GroupChatScreen(chatRef: controller.chatReference,),);
-            
-            print('chat members after go to chat clicked = ${controller.selectedFriendsChip}');
-          }, child: Text('Go to Chat'),),
-          SizedBox(height: Get.height*0.10),
-        ],),);
+          ElevatedButton(
+            onPressed: () {
+              final chatRefFromUi = Uuid().v1();
+
+              controller.chatReference = chatRefFromUi;
+              controller.update();
+              controller.createGroupChats(chatRefFromUi);
+              Get.to(
+                GroupChatScreen(
+                  chatRef: controller.chatReference,
+                ),
+              );
+
+              print('chat members after go to chat clicked = ${controller.selectedFriendsChip}');
+            },
+            child: Text('Go to Chat'),
+          ),
+          SizedBox(height: Get.height * 0.10),
+        ],
+      ),
+    );
   }
 }

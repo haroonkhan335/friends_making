@@ -13,7 +13,7 @@ class Inbox extends StatelessWidget {
   final controller = Get.put(SingleChatsController());
   @override
   Widget build(BuildContext context) {
-    print("ROUTE  ${Get.currentRoute.runtimeType}");
+    print("ROUTE  ${Get.currentRoute}");
     return Column(
       children: [
         Expanded(

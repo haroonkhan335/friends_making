@@ -1,5 +1,4 @@
-
-
+import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -10,62 +9,36 @@ import 'package:friends_making/src/chats/groupChats/services/groupChatsRepo.dart
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
+class GroupChatsController extends GetxController {
+  List<Friend> friends = [];
 
+  List<Friend> selectedFriendsChip = [];
 
-class GroupChatsController extends GetxController{
+  GroupChatsRepo repo = GroupChatsRepo();
 
-List<Friend> friends = [];
+  List<Message> messages = [];
 
+  String chatReference;
 
+  Color containerColour;
 
+  void changeColour() {
+    containerColour = Colors.amber;
+    update();
+  }
 
-List<Friend> selectedFriendsChip = [];
+  final authController = Get.find<AuthController>();
 
+  UserModel get currentUser => authController.user;
 
-GroupChatsRepo repo = GroupChatsRepo();
+  TextEditingController messageController = TextEditingController();
 
-List<Message> messages = [];
+  Future<void> createGroupChats(chatReferenceFromUi) async {
+    log('FRIENDS LIST +== ${selectedFriendsChip.length}');
+    await repo.createGroupChat(chatReferenceFromUi, selectedFriendsChip);
+  }
 
-String chatReference;
-
-
-Color containerColour;
-
-
-void changeColour (){
-  containerColour = Colors.amber;
-  update();
-}
-
-
-
-
-
-
-final authController = Get.find<AuthController>();
-
-UserModel get currentUser => authController.user;
-
-TextEditingController messageController = TextEditingController();
-
-
-
-
-Future<void> createGroupChats (chatReferenceFromUi) async {
-
-
-  await repo.createGroupChat(chatReferenceFromUi, selectedFriendsChip);
- 
-}
-
-
-
-Future<void> sendGroupMessage (String chatReferencefromUI) async {
-
-await repo.sendGroupMessage(messageController.text, chatReferencefromUI, selectedFriendsChip);
-
-}
-
-
-
+  Future<void> sendGroupMessage(String chatReferencefromUI) async {
+    await repo.sendGroupMessage(messageController.text, chatReferencefromUI, selectedFriendsChip);
+  }
 }

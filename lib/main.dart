@@ -8,7 +8,7 @@ import 'src/app/app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await NotificationService.initFcm();
+  // await NotificationService.initFcm();
 
   runApp(App());
 }
