@@ -104,7 +104,7 @@ final InitializationSettings initializationSettings = InitializationSettings(
 flutterLocalNotificationsPlugin.initialize(initializationSettings,
     onSelectNotification: onSelectNotification);
 ```
-## 3) Notifications In App
+## 4) Notifications In App
 
 - below code is used in app to call notification services in lib/main main.dart.
 
