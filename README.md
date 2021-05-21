@@ -68,3 +68,10 @@ class Application : FlutterApplication(), PluginRegistrantCallback {
 - Go to Android.xml file again, and replace "io.flutter.app.FlutterApplication" from android:name under "application" tag, with ".Application"
 
 
+# Enabling IOS Notifications
+
+## 1) Library Imports
+
+
+
+## 2) Configuring App Delegate
