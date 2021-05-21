@@ -75,3 +75,11 @@ class Application : FlutterApplication(), PluginRegistrantCallback {
 
 
 ## 2) Configuring App Delegate
+- go to ios/Runner/AppDelegate.swift file.
+- Place the below code for IOS notifications.
+
+```
+if #available(iOS 10.0, *) {
+UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+}
+```
