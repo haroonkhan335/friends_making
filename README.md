@@ -103,5 +103,77 @@ final InitializationSettings initializationSettings = InitializationSettings(
     iOS: initializationSettingsIOS);
 flutterLocalNotificationsPlugin.initialize(initializationSettings,
     onSelectNotification: onSelectNotification);
+```
+## 3) Notifications In App
 
-...
+- below code is used in app to call notification services in lib/main main.dart.
+
+
+```
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await NotificationService.initFcm();
+
+  runApp(App());
+}
+
+```
+
+- to initialize notifications below code is used in the app lib/src/app/app.dart.
+
+```
+ void initState() {
+    NotificationService.initNotifications();
+    NotificationService.getPushToken();
+    super.initState();
+  }
+
+```
+- to get push token, place the below code into dart file.
+
+```
+NotificationService.pushToken;
+
+```
+
+- to call notification function, below code is used.
+
+```
+sendNotification('some body of notification','some title of notification','some toke of notification')
+```
+
+
+- to generate notification, below function is used to generate notificaiton
+
+
+```
+static Future<http.Response> sendNotification({
+    @required String body,
+    @required String title,
+    @required String token,
+    String image,
+  }) async {
+    final response = await http.post(
+      Uri.parse('https://fcm.googleapis.com/fcm/send'),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: "key=$serverKey"
+      },
+      body: jsonEncode({
+        "to": token,
+        "priority": "high",
+        "data": {'imageUrl': image ?? null},
+        "notification": {
+          "vibrate": "300",
+          "priority": "high",
+          "body": body ?? '',
+          "title": title ?? '',
+          "sound": "default",
+        }
+      }),
+    );
+    return response;
+  }
+
+  ```
