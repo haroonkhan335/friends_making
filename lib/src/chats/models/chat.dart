@@ -16,7 +16,7 @@ class Chat {
   });
 
   factory Chat.fromDocument(doc) {
-    List<ChatMember> chatMembers = [];
+    List<ChatMember> chatMembers = [];                             //Firebase side - Map, client side - List
     final members = doc['chatMembers'];
     print("MEMBERS $members");
     if (members != null) {

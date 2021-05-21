@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ class _AllPostsState extends State<AllPosts> {
 
   @override
   Widget build(BuildContext context) {
+    log("ID === ${currentUser.uid}");
     return Flexible(
         child: GetBuilder<FeedController>(
       builder: (_) => ListView.builder(
