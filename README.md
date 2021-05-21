@@ -77,10 +77,31 @@ class Application : FlutterApplication(), PluginRegistrantCallback {
 
 ## 2) Configuring App Delegate
 - go to ios/Runner/AppDelegate.swift file.
-- Place the below code for IOS notifications.
+- place the below code for IOS notifications.
 
 ```
 if #available(iOS 10.0, *) {
 UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
 }
 ```
+
+## 3) Initializing The Plugin
+- add the following code into dart file in order to initialize the plugin.
+
+```
+final IOSInitializationSettings initializationSettingsIOS =
+    IOSInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+```
+
+- onDidReceiveLocalNotification is the method which defines the body of the notification.
+- add the below code in dart code in order to initialize settings.
+
+```
+final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS);
+flutterLocalNotificationsPlugin.initialize(initializationSettings,
+    onSelectNotification: onSelectNotification);
+
+...
