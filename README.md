@@ -71,7 +71,8 @@ class Application : FlutterApplication(), PluginRegistrantCallback {
 # Enabling IOS Notifications
 
 ## 1) Library Imports
-
+- Import [firebase_messaging](https://pub.dev/packages/firebase_messaging) from [pub.dev](pub.dev) in pubspec.yaml
+- Import [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
 
 
 ## 2) Configuring App Delegate
