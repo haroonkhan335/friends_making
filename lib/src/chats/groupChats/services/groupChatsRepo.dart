@@ -10,9 +10,9 @@ import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 class GroupChatsRepo {
-  var uuid = Uuid();
+  Uuid uuid = Uuid();
 
-  var chatReference;
+  DatabaseReference chatReference;
 
   final _firebaseDB = FirebaseDatabase.instance.reference();
 
@@ -42,7 +42,6 @@ class GroupChatsRepo {
 
   Future<void> createGroupChat(String chatRef, List<Friend> selectedFriends) async {
     var selectedFriendsMap = {};
-    log('GROUP FRIEND LIST === $selectedFriendsMap');
 
     final messageId = DateTime.now().microsecondsSinceEpoch;
 
@@ -146,6 +145,8 @@ class GroupChatsRepo {
       print(selectedFriendsMap);
 
       //*! TO DO - Print to other users' message List
+
+      //TODO
 
     } on Exception catch (e) {
       print('Error from writing chatSnap to DOB: $e');

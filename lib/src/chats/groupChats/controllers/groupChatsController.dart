@@ -34,7 +34,6 @@ class GroupChatsController extends GetxController {
   TextEditingController messageController = TextEditingController();
 
   Future<void> createGroupChats(chatReferenceFromUi) async {
-    log('FRIENDS LIST +== ${selectedFriendsChip.length}');
     await repo.createGroupChat(chatReferenceFromUi, selectedFriendsChip);
   }
 
