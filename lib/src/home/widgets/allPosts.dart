@@ -23,7 +23,7 @@ class _AllPostsState extends State<AllPosts> {
 
   @override
   void initState() {
-    controller.getPosts();
+    // controller.getPosts();
     // controller.removePosts();
     super.initState();
   }
@@ -34,17 +34,23 @@ class _AllPostsState extends State<AllPosts> {
     return Flexible(
         child: GetBuilder<FeedController>(
       builder: (_) => StreamBuilder<Object>(
-          stream: FirebaseDatabase.instance.reference().child('users/${currentUser.uid}/posts').onValue,
+          stream: FirebaseDatabase.instance.reference().child('user/${currentUser.uid}/posts').onValue,
           builder: (context, AsyncSnapshot snapshot) {
+            print(snapshot.data);
             if (snapshot.hasData) {
+              List<Post> posts = [];
+              print('snapshot have data');
               final docs = snapshot.data.snapshot.value;
+              log('DOCS == $docs');
 
               if (docs == null) {
                 return Center(child: Text('No Posts'));
               }
               docs.forEach((key, value) {
-                controller.posts.add(Post.fromDocument(value));
+                print('VALUE === $value');
+                posts.add(Post.fromDocument(value));
               });
+              controller.posts = posts;
               return ListView.builder(
                 itemCount:
                     controller.searchedPosts.length == 0 ? controller.posts.length : controller.searchedPosts.length,

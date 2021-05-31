@@ -159,12 +159,6 @@ class FeedController extends GetxController {
       print("EVENT ---- Post REMOVED ${event.snapshot.value}");
       final post = Post.fromDocument((await FirebaseDatabase.instance.reference().child('posts/$postId').once()).value);
       posts.removeWhere((postFromList) => postFromList.postId == post.postId);
-      List userPosts = authController.user.posts.toList();
-      userPosts.removeWhere((postFromList) => postFromList == post.postId);
-
-      log("USER POSTS === $userPosts");
-
-      authController.user.posts = userPosts;
 
       update();
       authController.update();
