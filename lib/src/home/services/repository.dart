@@ -137,17 +137,28 @@ class Repository {
 
   Future<void> post({Post post}) async {
     try {
-      // authController.user.posts.add(post);
-      // authController.update();
-      log('USER POSTS ============ ${Get.find<AuthController>().user.posts.length}');
       await allPostRef.child(post.postId).set(post.toJson());
-      await userReference(currUser.uid).update({
-        'posts': [...currUser.posts, post.postId],
-      });
+      await userReference(currUser.uid).child('posts').child(post.postId).set(post.toJson());
     } catch (e) {
       log('ERROR: $e === ${e.runtimeType}');
     }
   }
+
+  /*
+  posts: {
+    28934792874: {
+      postBody: 'lasjfklsdfj'
+    }
+  }
+  fksljdfkls: {
+    posts: {
+      j428749247: {
+        postBody: 'asdjfklsjfa',
+
+      }
+    }
+  }
+  */
 
   Future<void> likePost(Post post) async {
     if (post.likes.contains(currUser.uid)) {

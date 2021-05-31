@@ -15,6 +15,26 @@ class Feed extends StatelessWidget {
         body: GetBuilder<FeedController>(
       builder: (_) => Column(
         children: [
+          SizedBox(height: 10),
+          Container(
+            width: Get.width * 0.92,
+            child: TextField(
+              onChanged: (value) {
+                feedController.searchPostWithHashtag(value);
+              },
+              // onSubmitted: (value) {
+              //   feedController.searchPostWithHashtag(value);
+              // },
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                suffixIcon: Icon(Icons.search),
+                hintText: 'Search with hashtag',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
           Container(
             height: height * 0.3,
             width: width,
