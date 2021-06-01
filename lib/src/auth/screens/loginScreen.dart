@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:friends_making/consts/socialLoginButtons.dart';
 import 'package:friends_making/src/auth/controllers/authController.dart';
 import 'package:friends_making/utils/pages.dart';
 import 'package:get/get.dart';
@@ -62,7 +63,15 @@ class LoginScreen extends StatelessWidget {
                     child: Text('Don\'t have an account? Sign Up'),
                     onPressed: () {
                       Get.toNamed(Pages.SIGN_UP);
-                    })
+                    }),
+                Divider(
+                  height: 2,
+                  color: Colors.grey,
+                  thickness: 2,
+                ),
+                SocialLoginButtons.facebook,
+                SizedBox(height: 25),
+                SocialLoginButtons.google,
               ],
             ),
           ),

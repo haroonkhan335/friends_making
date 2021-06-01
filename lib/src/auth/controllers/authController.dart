@@ -26,8 +26,7 @@ class AuthController extends GetxController {
   }
 
   void login() async {
-    this.user =
-        await authService.login(emailController.text, passwordController.text);
+    this.user = await authService.login(emailController.text, passwordController.text);
     update();
   }
 
@@ -38,18 +37,11 @@ class AuthController extends GetxController {
 
   void signUp() async {
     if (pickedFile == null) {
-      Get.snackbar('', '',
-          titleText: Text('Please select an image',
-              style: TextStyle(color: Colors.red)));
+      Get.snackbar('', '', titleText: Text('Please select an image', style: TextStyle(color: Colors.red)));
       return;
     }
-    user = await authService.signUpUser(
-        emailController.text, passwordController.text,
-        image: pickedFile,
-        userData: {
-          'fullName': fullNameController.text,
-          'email': emailController.text
-        });
+    user = await authService.signUpUser(emailController.text, passwordController.text,
+        image: pickedFile, userData: {'fullName': fullNameController.text, 'email': emailController.text});
     if (user != null) Get.back();
     update();
   }
@@ -63,5 +55,9 @@ class AuthController extends GetxController {
     user.pushToken = pushToken;
     update();
     await authService.refreshToken(pushToken);
+  }
+
+  void signInWithGoogle() async {
+    await authService.signInWithGoogle(this);
   }
 }
