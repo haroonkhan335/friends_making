@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:friends_making/src/chats/groupChats/groupFriends.dart';
 import 'package:friends_making/src/chats/groupChats/groups.dart';
+import 'package:friends_making/src/chats/groupChats/widgets/groupInbox.dart';
 import 'package:friends_making/src/chats/singleChats/friends.dart';
 import 'package:friends_making/src/chats/singleChats/inbox.dart';
 import 'package:friends_making/src/home/controllers/chatController.dart';
@@ -16,6 +18,9 @@ class Chats extends StatelessWidget {
         onPressed: () {
           if (controller.selectedTab == Tabs.Chats) {
             Get.to(Friends());
+          }
+          if (controller.selectedTab == Tabs.Groups) {
+            Get.to(GroupFriends());
           } else {
             print("GROUPS");
             //TODO: Make a group
@@ -74,7 +79,7 @@ class Chats extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(child: controller.selectedTab == Tabs.Chats ? Inbox() : Groups())
+            Expanded(child: controller.selectedTab == Tabs.Chats ? Inbox() : GroupInbox())
           ],
         ),
       ),

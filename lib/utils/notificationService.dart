@@ -21,8 +21,7 @@ class NotificationService {
     importance: Importance.high,
   );
 
-  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   static AndroidInitializationSettings initialzationSettingsAndroid;
 
@@ -48,10 +47,8 @@ class NotificationService {
   }
 
   static Future<void> initNotifications() async {
-    initialzationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    initializationSettings =
-        InitializationSettings(android: initialzationSettingsAndroid);
+    initialzationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    initializationSettings = InitializationSettings(android: initialzationSettingsAndroid);
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
@@ -81,8 +78,7 @@ class NotificationService {
     });
   }
 
-  static Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
+  static Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('Handling a background message ${message.messageId}');
     print(message.data);
     // await flutterLocalNotificationsPlugin.show(
@@ -106,10 +102,7 @@ class NotificationService {
   }) async {
     final response = await http.post(
       Uri.parse('https://fcm.googleapis.com/fcm/send'),
-      headers: {
-        HttpHeaders.contentTypeHeader: 'application/json',
-        HttpHeaders.authorizationHeader: "key=$serverKey"
-      },
+      headers: {HttpHeaders.contentTypeHeader: 'application/json', HttpHeaders.authorizationHeader: "key=$serverKey"},
       body: jsonEncode({
         "to": token,
         "priority": "high",

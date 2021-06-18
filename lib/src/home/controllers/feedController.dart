@@ -24,6 +24,8 @@ class FeedController extends GetxController {
 
   List<Post> posts = [];
 
+  List<Post> searchedPosts = [];
+
   TextEditingController bodyPostController = TextEditingController();
 
   TextEditingController commentController = TextEditingController();
@@ -31,12 +33,7 @@ class FeedController extends GetxController {
   TextEditingController postTagsController = TextEditingController();
 
   Stream getFeed() {
-    FirebaseDatabase.instance
-        .reference()
-        .child('user')
-        .orderByChild('fullName')
-        .onValue
-        .listen((Event event) {
+    FirebaseDatabase.instance.reference().child('user').orderByChild('fullName').onValue.listen((Event event) {
       print(event.snapshot.value);
     });
   }
@@ -50,6 +47,7 @@ class FeedController extends GetxController {
     for (String word in words) {
       if (word.startsWith('#')) {
         currentTags.add(word);
+        print(currentTags);
       }
 
       body.add(
@@ -67,6 +65,29 @@ class FeedController extends GetxController {
     update();
   }
 
+  List<TextSpan> createhashifiedBody(String postBody) {
+    List<TextSpan> postText = [];
+    List<String> postTags = [];
+    postBody = postBody.replaceAll('\n', '\n ');
+    final words = postBody.split(' ');
+
+    for (String word in words) {
+      if (word.startsWith('#')) {
+        postTags.add(word);
+      }
+
+      postText.add(
+        TextSpan(
+          text: '$word ',
+          style: TextStyle(
+            color: postTags.contains(word) ? Colors.blue : Colors.black,
+          ),
+        ),
+      );
+    }
+    return postText;
+  }
+
   void toggleEditing() {
     body.clear();
     currentTags.clear();
@@ -74,12 +95,28 @@ class FeedController extends GetxController {
     update();
   }
 
+  void searchPostWithHashtag(String searchQuery) {
+    print('POST LENGTH ${posts.length}');
+    for (final post in posts) {
+      print(post.tags);
+    }
+    print(searchQuery);
+    // final List<String> postsHashtags = [for (final post in posts) post.tags];
+    searchedPosts = posts.where((post) => post.tags.contains(searchQuery)).toList();
+
+    print(searchedPosts.length);
+    update();
+  }
+
   void post() async {
-    toggleEditing();
     final body = bodyPostController.text;
+    final tags = [for (final tag in currentTags) tag];
+    log('TAGS LENGTH == ${tags.length}');
+    toggleEditing();
     bodyPostController.clear();
     update();
-    await repo.post(post: Post.createNewPost(body: body, tags: currentTags));
+    log('CURRENT TAGS === ${tags.length}');
+    await repo.post(post: Post.createNewPost(body: body, tags: tags));
   }
 
   void likePost(Post post) {
@@ -104,11 +141,7 @@ class FeedController extends GetxController {
         .listen((event) async {
       final postId = event.snapshot.value;
 
-      final post = Post.fromDocument((await FirebaseDatabase.instance
-              .reference()
-              .child('posts/$postId')
-              .once())
-          .value);
+      final post = Post.fromDocument((await FirebaseDatabase.instance.reference().child('posts/$postId').once()).value);
       if (!checkId(post.postId)) {
         posts.add(post);
         update();
@@ -124,18 +157,8 @@ class FeedController extends GetxController {
         .listen((event) async {
       final postId = event.snapshot.value;
       print("EVENT ---- Post REMOVED ${event.snapshot.value}");
-      final post = Post.fromDocument((await FirebaseDatabase.instance
-              .reference()
-              .child('posts/$postId')
-              .once())
-          .value);
+      final post = Post.fromDocument((await FirebaseDatabase.instance.reference().child('posts/$postId').once()).value);
       posts.removeWhere((postFromList) => postFromList.postId == post.postId);
-      List userPosts = authController.user.posts.toList();
-      userPosts.removeWhere((postFromList) => postFromList == post.postId);
-
-      log("USER POSTS === $userPosts");
-
-      authController.user.posts = userPosts;
 
       update();
       authController.update();

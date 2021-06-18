@@ -15,6 +15,26 @@ class Feed extends StatelessWidget {
         body: GetBuilder<FeedController>(
       builder: (_) => Column(
         children: [
+          SizedBox(height: 10),
+          Container(
+            width: Get.width * 0.92,
+            child: TextField(
+              onChanged: (value) {
+                feedController.searchPostWithHashtag(value);
+              },
+              // onSubmitted: (value) {
+              //   feedController.searchPostWithHashtag(value);
+              // },
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                suffixIcon: Icon(Icons.search),
+                hintText: 'Search with hashtag',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
           Container(
             height: height * 0.3,
             width: width,
@@ -37,13 +57,11 @@ class Feed extends StatelessWidget {
                       ? TextFormField(
                           maxLines: 5,
                           controller: feedController.bodyPostController,
-                          decoration:
-                              InputDecoration(border: OutlineInputBorder()),
+                          decoration: InputDecoration(border: OutlineInputBorder()),
                         )
                       : Container(
                           width: width,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             color: Colors.white,
@@ -54,9 +72,7 @@ class Feed extends StatelessWidget {
                               )
                             ],
                           ),
-                          child: RichText(
-                              text: TextSpan(
-                                  text: '', children: feedController.body)),
+                          child: RichText(text: TextSpan(text: '', children: feedController.body)),
                         ),
                   SizedBox(height: 15),
                   feedController.isEditing
